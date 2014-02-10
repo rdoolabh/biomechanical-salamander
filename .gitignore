@@ -218,16 +218,16 @@ pip-log.txt
 ###########
 ## Visual Studio Files
 ###########
-.log
-.tlog
-.obj
-.pdb
-.lastbuildstate
-.exe
-.ilk
-.idb
-.sdf
-.ipch
-.cache
-.opensdf
+*.log
+*.tlog
+*.obj
+*.pdb
+*.lastbuildstate
+*.exe
+*.ilk
+*.idb
+*.sdf
+*.ipch
+*.cache
+*.opensdf
 
