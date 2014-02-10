@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="GlutTemplateEnhanced">
+</Property><Property Name="Solution File" Value="C:\Users\Luis Angel\Documents\Visual Studio 2010\Projects\GlutTemplate_vs2008\GlutTemplate_vs2008\GlutTemplateEnhanced.sln">
+</Property><Property Name="Date" Value="Friday, January 17, 2014">
+</Property><Property Name="Time" Value="2:21 AM">
+</Property></Properties><Event ErrorLevel="0" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="Converting project file 'C:\Users\Luis Angel\Documents\Visual Studio 2010\Projects\GlutTemplate_vs2008\GlutTemplate_vs2008\GlutTemplateEnhanced.vcproj'.">
+</Event><Event ErrorLevel="1" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="1" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="0" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="Done converting to new project file 'C:\Users\Luis Angel\Documents\Visual Studio 2010\Projects\GlutTemplate_vs2008\GlutTemplate_vs2008\GlutTemplateEnhanced.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="GlutTemplateEnhanced" Source="GlutTemplateEnhanced.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="GlutTemplateEnhanced.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="GlutTemplateEnhanced.sln" Description="Converted">
+</Event></UpgradeLog>
