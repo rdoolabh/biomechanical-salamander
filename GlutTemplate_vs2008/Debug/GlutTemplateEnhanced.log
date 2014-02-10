@@ -1,52 +1,15 @@
-﻿Build started 2/9/2014 5:14:30 PM.
+﻿Build started 2/9/2014 5:43:28 PM.
      1>Project "C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\GlutTemplateEnhanced.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GlutTemplateEnhanced.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\/" /Iinclude/ /Iode/src/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D dDOUBLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GDrawing.cpp GOde.cpp GOdeObject.cpp source\Ball.cpp source\BallAux.cpp source\BallMath.cpp source\FrameSaver.cpp source\main.cpp source\Timer.cpp
-         Timer.cpp
-         main.cpp
-     1>c:\users\owner\documents\github\biomechanical-salamander\gluttemplate_vs2008\source\main.cpp(77): warning C4101: 'result' : unreferenced local variable
-         FrameSaver.cpp
-         BallMath.cpp
-         BallAux.cpp
-         Ball.cpp
-         GOdeObject.cpp
-     1>c:\users\owner\documents\github\biomechanical-salamander\gluttemplate_vs2008\godeobject.cpp(159): warning C4018: '<' : signed/unsigned mismatch
-         GOde.cpp
-     1>c:\users\owner\documents\github\biomechanical-salamander\gluttemplate_vs2008\gode.cpp(337): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\github\biomechanical-salamander\gluttemplate_vs2008\gode.cpp(347): warning C4018: '<' : signed/unsigned mismatch
-         GDrawing.cpp
-         Generating Code...
+         All outputs are up-to-date.
        ManifestResourceCompile:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\GlutTemplateEnhanced.exe.embed.manifest.res" Debug\GlutTemplateEnhanced_manifest.rc 
+         All outputs are up-to-date.
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.exe" /INCREMENTAL /NOLOGO /LIBPATH:GL lib/DebugDoubleDLL/ode_doubled.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GlutTemplateEnhanced.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.lib" /MACHINE:X86 Debug\GlutTemplateEnhanced.exe.embed.manifest.res
-         Debug\GDrawing.obj
-         Debug\GOde.obj
-         Debug\GOdeObject.obj
-         Debug\Ball.obj
-         Debug\BallAux.obj
-         Debug\BallMath.obj
-         Debug\FrameSaver.obj
-         Debug\main.obj
-         Debug\Timer.obj
+         All outputs are up-to-date.
        Manifest:
-         Deleting file "Debug\GlutTemplateEnhanced.exe.embed.manifest".
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\GlutTemplateEnhanced.exe.embed.manifest" /manifest Debug\GlutTemplateEnhanced.exe.intermediate.manifest
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\GlutTemplateEnhanced.exe.embed.manifest.res" Debug\GlutTemplateEnhanced_manifest.rc 
-       LinkEmbedManifest:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.exe" /INCREMENTAL /NOLOGO /LIBPATH:GL lib/DebugDoubleDLL/ode_doubled.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GlutTemplateEnhanced.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.lib" /MACHINE:X86 Debug\GlutTemplateEnhanced.exe.embed.manifest.res
-         Debug\GDrawing.obj
-         Debug\GOde.obj
-         Debug\GOdeObject.obj
-         Debug\Ball.obj
-         Debug\BallAux.obj
-         Debug\BallMath.obj
-         Debug\FrameSaver.obj
-         Debug\main.obj
-         Debug\Timer.obj
-         GlutTemplateEnhanced.vcxproj -> C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.exe
+         All outputs are up-to-date.
        PostBuildEvent:
          copy "C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\\GL\glut32.dll" "C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\glut32.dll"
          :VCEnd
@@ -58,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:11.85
+Time Elapsed 00:00:00.16

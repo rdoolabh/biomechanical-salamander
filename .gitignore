@@ -231,3 +231,6 @@ pip-log.txt
 *.cache
 *.opensdf
 
+#ignore whole folder
+
+Debug/
