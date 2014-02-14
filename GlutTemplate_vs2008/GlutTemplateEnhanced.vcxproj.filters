@@ -33,13 +33,10 @@
     <ClCompile Include="source\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GDrawing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GOde.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GOdeObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDrawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,13 +56,13 @@
     <ClInclude Include="source\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GDrawing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GOde.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GOdeObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDrawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
