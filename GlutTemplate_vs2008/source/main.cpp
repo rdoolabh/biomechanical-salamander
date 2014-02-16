@@ -95,7 +95,7 @@ void initODE()
 	dWorldSetContactSurfaceLayer( World, 0.001 );
 
 	//Automatically disable objects that have come to a rest.
-	dWorldSetAutoDisableFlag( World, 1 );
+	dWorldSetAutoDisableFlag( World, 0 );
 
 	//Create a collision plane and add it to space. The next parameters are the
 	//literal components of ax + by + cz = d.
@@ -104,7 +104,7 @@ void initODE()
 	/////////////// Initializing the rigid body 1 in the world /////////////////
 
 	Object[0].Body = dBodyCreate( World );		//Create a new body and attach it to object.
-	dBodySetPosition( Object[0].Body, 0.0, 1.5, 0.0 );		//Assign position to body.
+	dBodySetPosition( Object[0].Body, 0.0, 5.5, 0.0 );		//Assign position to body.
 	dBodySetLinearVel( Object[0].Body, 0.0, 0.0, 0.0 );		//Object begins stationary.
 
 	dMass m, M;									//Start accumulating mass.
@@ -137,7 +137,7 @@ void initODE()
 		Object[0].Geom[I] = dCreateCapsule( Space, radius, length );
 		
 		//Create mass distribution for a capsule.
-		dMassSetCapsule( &m, 0.3, 3, radius, length );
+		dMassSetCapsule( &m, 0.1, 3, radius, length );
 		if(I==0)length =3.0;
 		//Rotate and translate the capsule-mass distribution in the body frame.
 		dMassRotate( &m, rotations[I] );
@@ -198,7 +198,7 @@ void closeODE()
 	dSpaceDestroy( Space );					//Remove the space and all of its geoms.
 	dWorldDestroy( World );					//Destroy all bodies and joints (not in a group).
 }
-char frictCoeff='l';
+char frictCoeff='f';
 /*******************************************************************************
 Function to handle potential collisions between geometries.
 *******************************************************************************/
@@ -219,20 +219,17 @@ static void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	{
 		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 		if(I==1){
-			(frictCoeff=='l')?contacts[I].surface.mu = 0:contacts[I].surface.mu = dInfinity;
-			(frictCoeff=='l')?contacts[I].surface.mu2 = 0:contacts[I].surface.mu2 = dInfinity;
-			(frictCoeff=='r')?contacts[I].surface.mu = dInfinity:contacts[I].surface.mu =0;
-			(frictCoeff=='r')?contacts[I].surface.mu2 = dInfinity:contacts[I].surface.mu2 = 0;}
+			if(frictCoeff=='l') contacts[I].surface.mu = 0;
+			else if (frictCoeff=='r') contacts[I].surface.mu = dInfinity;
+			else contacts[I].surface.mu = 0;}
 		else if(I==2){
-			(frictCoeff=='l')?contacts[I].surface.mu = dInfinity:contacts[I].surface.mu = 0;
-			(frictCoeff=='l')?contacts[I].surface.mu2 = dInfinity:contacts[I].surface.mu2 = 0;
-			(frictCoeff=='r')?contacts[I].surface.mu = 0:contacts[I].surface.mu = dInfinity;
-			(frictCoeff=='r')?contacts[I].surface.mu2 = 0:contacts[I].surface.mu2 = dInfinity;}
-		else if(I==0)
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		}
+			if(frictCoeff=='l') contacts[I].surface.mu = dInfinity;
+			else if (frictCoeff=='r') contacts[I].surface.mu = 0;
+			else contacts[I].surface.mu = 0;}
+		else if(I==0)	contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
+
+		contacts[I].surface.slip1=1.0;
+		contacts[I].surface.slip2=1.0;
 		contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
 		contacts[I].surface.bounce_vel = 0.5;	//Minimum incoming velocity for producting bouncyness.
 		contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
@@ -240,10 +237,11 @@ static void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 
 	//Now, do the actual collision test, passing as parameters the address of
 	//a dContactGeom structure, and the offset to the next one in the list.
+	
 	if( int numc = dCollide( o1, o2, MAX_CONTACTS, &contacts[0].geom, sizeof(dContact) ) )
 	{
 		//Add contacts detected to the contact joint group.
-		for( I = 0; I < numc; I++ )
+		for( I = 0; I < numc; I++ ) // REDUCING THIS to numc-1 removes the getting stuck problem, but raises other problems
 		{
 			//Add contact joint by knowing its world, to a contact group. The last parameter
 			//is the contact itself.
@@ -251,6 +249,10 @@ static void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 			dJointAttach( c, b1, b2 );		//Attach two bodies to this contact joint.
 		}
 	}
+	cout <<"--------Frictions-------"<<endl;
+	cout <<"frictCoeff: "<<frictCoeff<<endl;
+	cout <<"object 1: " <<contacts[1].surface.mu;
+	cout <<"object 2: " <<contacts[2].surface.mu;
 }
 
 /*******************************************************************************
@@ -475,14 +477,19 @@ void myKey(unsigned char key, int x, int y)
 		case '3':
 			//Apply force to a point given in body coordinates.
 			frictCoeff='l';
-			dBodyAddForceAtRelPos( Object[0].Body, 0.0, 0.0, 1000.0, localPoint[0], localPoint[1], localPoint[2] );
+			dBodyAddForceAtRelPos( Object[0].Body, 0.0, 0.0, 100.0, localPoint[0], localPoint[1], localPoint[2] );
 			break;
 			//dJointAddHingeTorque( ode.getJoint(0), -10.0 );
 			//break;
 		case '4':
 			//Apply force to a point given in body coordinates.
 			frictCoeff='r';
-			dBodyAddForceAtRelPos( Object[0].Body, 0.0, 0.0, 1000.0, localPoint[0], localPoint[1], localPoint[2] );
+			dBodyAddForceAtRelPos( Object[0].Body, 0.0, 0.0, 100.0, localPoint[0], localPoint[1], localPoint[2] );
+			break;
+		case '5':
+			//Apply force to a point given in body coordinates.
+			frictCoeff='f';
+			dBodyAddForceAtRelPos( Object[0].Body, 0.0, 0.0, 100.0, localPoint[0], localPoint[1], localPoint[2] );
 			break;
 	}
 	glutPostRedisplay();
@@ -496,8 +503,8 @@ void myinit(void)
     GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
     GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    //GLfloat position[] = { -3.0, 3.0, 3.0, 0.0 };
-	GLfloat position[] = { 0.0, 0.0, 30.0, 1.0 };
+    GLfloat position[] = { -3.0, 3.0, 3.0, 0.0 };
+	//GLfloat position[] = { 0.0, 0.0, 30.0, 1.0 };
 	GLfloat diffuse2[] = { 0.3, 0.3, 0.3, 1.0 };
     GLfloat specular2[] = { 0.3, 0.3, 0.3, 1.0 };
 	GLfloat position2[] = { 0.0, 100.0, 00.0, 1.0 };
@@ -737,6 +744,3 @@ int main(int argc, char** argv)
 	g_timer.Reset();
 	return 0;         //Never reached
 }
-
-
-
