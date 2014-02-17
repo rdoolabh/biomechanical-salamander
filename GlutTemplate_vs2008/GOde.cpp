@@ -18,6 +18,7 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	//Get the dynamics body for each potentially colliding geometry.
 	dBodyID b1 = dGeomGetBody( o1 );
 	dBodyID b2 = dGeomGetBody( o2 );
+	int *ptr=(int*)dGeomGetData(o1);
 
 	//Create an array of dContact objects to hold the contact joints.
 	dContact contacts[ MAX_CONTACTS ];
@@ -25,12 +26,52 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	//Initialize contact structures.
 	for( I = 0; I < MAX_CONTACTS; I++ )
 	{
-		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
-		contacts[I].surface.mu = 0.001;		//0: frictionless, dInfinity: never slips.
-		contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-		contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-		contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		if(*ptr==0)
+		{
+			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		}
+		else if(*ptr==1)
+		{
+			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		}
+		else if(*ptr==2)
+		{
+			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		}
+		else if(*ptr==3)
+		{
+			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		}
+		else
+		{
+			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+
+		}
 	}
 
 	//Now, do the actual collision test, passing as parameters the address of
@@ -153,6 +194,7 @@ void GOde::simulationLoop()
 	//Second, determine which geoms inside the space are potentially colliding.
 	//The nearCallBack function will be responsible for analizing those potential collisions.
 	//The second parameter indicates that no user data is being sent the callback routine.
+	
 	dSpaceCollide( Space, 0, &nearCallBack );
 
 	//Third, advance the simulation, based on the step size given.
