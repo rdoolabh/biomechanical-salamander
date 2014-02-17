@@ -26,52 +26,35 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	//Initialize contact structures.
 	for( I = 0; I < MAX_CONTACTS; I++ )
 	{
+		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 		if(*ptr==0)
 		{
-			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
 		}
 		else if(*ptr==1)
 		{
-			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
 		}
 		else if(*ptr==2)
 		{
-			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
 		}
 		else if(*ptr==3)
 		{
-			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
 		}
 		else
 		{
-			contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
 			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+		}
 			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
 			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
 			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
-
-		}
 	}
 
 	//Now, do the actual collision test, passing as parameters the address of
