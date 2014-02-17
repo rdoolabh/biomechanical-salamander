@@ -1,0 +1,21 @@
+﻿Build started 2/16/2014 3:39:29 PM.
+     1>Project "C:\Users\Luis Angel\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\GlutTemplateEnhanced.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\GlutTemplateEnhanced.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         GlutTemplateEnhanced.vcxproj -> C:\Users\Luis Angel\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\GlutTemplateEnhanced.exe
+       PostBuildEvent:
+         copy "C:\Users\Luis Angel\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\\GL\glut32.dll" "C:\Users\Luis Angel\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\Debug\glut32.dll"
+         :VCEnd
+                 1 file(s) copied.
+       FinalizeBuildStatus:
+         Deleting file "Debug\GlutTemplateEnhanced.unsuccessfulbuild".
+         Touching "Debug\GlutTemplateEnhanced.lastbuildstate".
+     1>Done Building Project "C:\Users\Luis Angel\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\GlutTemplateEnhanced.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.10

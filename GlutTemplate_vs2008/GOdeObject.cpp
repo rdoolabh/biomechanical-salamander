@@ -6,6 +6,7 @@ Constructor.
 GOdeObject::GOdeObject(void)
 {
 	R = G = B = 0.9;			//Set a default color for this object.
+	userData = 0;				//No user data associated with the object.
 }
 
 /*******************************************************************************
@@ -33,7 +34,7 @@ void GOdeObject::ODEToOpenGLMatrix( const dReal* p, const dReal* R, dReal* M)
 /*******************************************************************************
 Function to render a box, given it sides length, position and orientation.
 *******************************************************************************/
-void GOdeObject::renderBox( const dReal sides[3], const dReal position[3], const dReal orientation[12] )
+void GOdeObject::renderBox( const dReal sides[3], const dReal position[3], const dReal orientation[12] ) const
 {
 	glPushMatrix();					//Save current ModelView.
 	
@@ -49,7 +50,7 @@ void GOdeObject::renderBox( const dReal sides[3], const dReal position[3], const
 /*******************************************************************************
 Function to render a sphere, given its radius, position and orientation.
 *******************************************************************************/
-void GOdeObject::renderSphere( const dReal radius, const dReal position[3], const dReal orientation[12] )
+void GOdeObject::renderSphere( const dReal radius, const dReal position[3], const dReal orientation[12] ) const
 {
 	glPushMatrix();					//Save current ModelView.
 
@@ -65,7 +66,7 @@ void GOdeObject::renderSphere( const dReal radius, const dReal position[3], cons
 /*******************************************************************************
 Function to render a capsule, given its radius, length, position and orientation.
 *******************************************************************************/
-void GOdeObject::renderCapsule( const dReal radius, const dReal length, const dReal position[3], const dReal orientation[12] )
+void GOdeObject::renderCapsule( const dReal radius, const dReal length, const dReal position[3], const dReal orientation[12] ) const
 {
 	glPushMatrix();					//Save current ModelView.
 
@@ -95,7 +96,7 @@ void GOdeObject::renderCapsule( const dReal radius, const dReal length, const dR
 /*******************************************************************************
 Function to draw a geometry object.
 *******************************************************************************/
-void GOdeObject::drawGeom( dGeomID g, const dReal *position, const dReal *orientation )
+void GOdeObject::drawGeom( dGeomID g, const dReal *position, const dReal *orientation ) const
 {
 	if( !g )		//If the geometry object is missing, end the function.
 		return;
@@ -153,7 +154,7 @@ void GOdeObject::drawGeom( dGeomID g, const dReal *position, const dReal *orient
 /*******************************************************************************
 Function to draw all geometries associated to object's body.
 *******************************************************************************/
-void GOdeObject::drawGeometries()
+void GOdeObject::drawGeometries() const
 {
 	GDrawing::setColor( R, G, B );				//Draw geometries using object's color.
 	for( int I = 0; I < geometries.size(); I++ )

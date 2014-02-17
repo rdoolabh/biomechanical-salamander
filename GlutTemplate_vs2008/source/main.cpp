@@ -224,7 +224,7 @@ void display(void)
 	glPushMatrix();						//Draw the collision plane.
 	glTranslated( 0.0, -0.005, 0.0 );
 	glScaled( 20.0, 0.01, 20.0 );
-	GDrawing::setColor( 1.0, 0.2, 0.3 );
+	GDrawing::setColor( 0.5, 0.5, 0.55 );
 	GDrawing::drawCube();
 	glPopMatrix();
 
