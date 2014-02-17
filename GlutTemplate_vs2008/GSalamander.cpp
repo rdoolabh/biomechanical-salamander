@@ -3,7 +3,7 @@ Implementation of the Salamander class functions.
 *******************************************************************************/
 
 #include "GSalamander.h"
-
+#include <math.h>
 /*******************************************************************************
 Default constructor: set a new salamander at the origin of the world frame.
 *******************************************************************************/
@@ -55,17 +55,32 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	Tail 2		0.03			0.016			0.0094
 	Tail 3		0.03			0.01			0.0059
 	Tail 4		0.03			0.005			0.0029
+	Leg- FL		0.25			0.01			0.002
+	Leg- FR		0.25			0.01			0.002
+	Leg- BL		0.15			0.01			0.0012
+	Leg- BR		0.15			0.01			0.0012
 	//////////////////////////////////////////////////////////////////////////*/
 	dReal length[] = { 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03 };
 	dReal width[] = { 0.03, 0.025, 0.03, 0.03, 0.03, 0.022, 0.02, 0.016, 0.01, 0.005 };	 //Encoding of biometrics.
 	dReal height[] = { 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 };
 	dReal mass[] = { 0.0177, 0.0147, 0.0177, 0.0177, 0.0177, 0.013, 0.0118, 0.0094, 0.0059, 0.0029 };
+	dReal lLength[]= {0.025, 0.025, 0.025,0.025};
+	dReal lWidth[]= {0.02, 0.02, 0.02, 0.02};
+	dReal lMass[]= {0.002, 0.002, 0.002, 0.002};
 
 	//Create links for head, neck, trunk, and tail; all with length 0.03.
 	//Salamander's body grows along the an axis parallel to x.
 	int nSegments = 10;
 	dReal prevX = sPosition[0];						//To know where the previous link ended (considering joint space too).
 	dReal jointSpace = 0.03;						//Empty space to accomodate internal joint.
+
+	dReal tempx1=0.0;								//temp variables for positions of links 1 and 4
+	dReal tempy1=0.0;
+	dReal tempz1=0.0;
+	dReal tempx5=0.0;
+	dReal tempy5=0.0;
+	dReal tempz5=0.0;
+
 	for( int I = 0; I < nSegments; I++ )			//10 links exactly.
 	{
 		GOdeObject link;										//Create a new body link.
@@ -76,6 +91,8 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 		dReal y = sPosition[1];
 		dReal z = sPosition[2];
 		dBodySetPosition( link.body, x, y, z );					//Position link.
+		if(I==1){tempx1=x;tempy1=y;tempz1=z;}
+		if(I==5){tempx5=x;tempy5=y;tempz5=z;}
 		
 		dBodySetLinearVel( link.body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
 		
@@ -100,14 +117,38 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 		}
 
 		links.push_back( link );								//Attach new link to the list of links.
-
 		prevX += length[I] + jointSpace;						//Making space for joint in between links.
+	}
+	
+	for( int i=1; i<5;i++){
+		GOdeObject link;										//Create a new body link.
+		link.body = dBodyCreate( world );						//Attach new body to world.
+		link.userData = 1;										//1 means salamander's head/neck/trunk/tail link.
+		if(i<3)
+			dBodySetPosition( link.body, tempx1, tempy1, tempz1+(pow(-1.0,i))*lLength[0]*2.0 );	
+		else
+			dBodySetPosition( link.body, tempx5, tempy5, tempz5+(pow(-1.0,i))*lLength[0]*2.0 ); //Position link.
+		
+		dBodySetLinearVel( link.body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
+		
+		dMass M;
+		dMassSetBoxTotal( &M, lMass[i-1], lLength[i-1], height[i-1], lWidth[i-1]);
+		dBodySetMass( link.body, &M );							//Mass distribution.
+		
+		dGeomID g;
+		g = dCreateBox( space, lLength[i-1], height[i-1], lWidth[i-1] );//Geometry.
+		dGeomSetData( g, &(link.userData) );					//Attach a user data pointer to geometry.
+		link.geometries.push_back( g );
+		dGeomSetBody( link.geometries[0], link.body );			//Link body to geometry.
+
+		links.push_back( link );	
 	}
 
 	//Create hinge joints for the 10 links in the body.
 	dReal hingeAxis[] = { 0.0, 1.0, 0.0 };						//Hinge axis is parallell to y axis.
 	dReal phaseStep = 2.0*GDrawing::pi/9.0;						//In case it is swimmer. 
-	for( int I = 0; I < nSegments - 1; I++ )
+
+	for( int I = 0; I < nSegments-1; I++ )
 	{
 		dJointID joint;
 		joint = dJointCreateHinge( world, jointGroup );			//Create a hinge.
@@ -141,6 +182,45 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 			gsJoint.lambda = I * phaseStep;						//If it is a swimmer, joints have different phase.
 
 		gsJoint.type = 'b';										//'b' is for body joint.
+
+		gsJoints.push_back( gsJoint );							//Attach joint information to the general list.
+	}
+	
+	for( int I = nSegments; I < nSegments+4; I++ ) // legs -1
+	{
+		dJointID joint;
+		joint = dJointCreateHinge( world, jointGroup );			//Create a hinge.
+		if(I<nSegments+2)	dJointAttach( joint, links[1].body, links[I].body );	//Attach two consecutive bodies.
+		else dJointAttach( joint, links[5].body, links[I].body );
+		dReal anchor[3];										//Anchor position for this joint.
+		const dReal *pos1, *pos2;								//Positions for object 1 and 2.
+		pos1 = dBodyGetPosition( links[I].body );
+		if(I<nSegments+2)	pos2 = dBodyGetPosition( links[1].body );
+		else pos2  =dBodyGetPosition( links[5].body );
+		anchor[0] = ( pos1[0] + pos2[0] ) / 2.0;				//Get the mid point.
+		anchor[1] = ( pos1[1] + pos2[1] ) / 2.0;
+		anchor[2] = ( pos1[2] + pos2[2] ) / 2.0;
+		dJointSetHingeAnchor( joint, anchor[0], anchor[1], anchor[2] );
+
+		dJointSetHingeAxis( joint, hingeAxis[0], hingeAxis[1], hingeAxis[2] );	//Set axis for hing joint.
+		dJointSetHingeParam( joint, dParamLoStop, 0 );			//Sets limits for hinge angle.
+		dJointSetHingeParam( joint, dParamHiStop, 0 );
+
+		GSJoint gsJoint;										//Create object to hold information on this joint.
+		gsJoint.angleDeformation = 0;							//Initialize angle deformation.
+		gsJoint.joint = joint;									//Attach joint just created.
+		
+		if( lander )
+		{
+			if( I == 0 || I >= 5 )		//Head and tail are in phase = pi.
+				gsJoint.lambda = GDrawing::pi;
+			else
+				gsJoint.lambda = 0.0;	//Joints in trunk are in phase.
+		}
+		else
+			gsJoint.lambda = I * phaseStep;						//If it is a swimmer, joints have different phase.
+
+		gsJoint.type = 'l';										//'b' is for body joint.
 
 		gsJoints.push_back( gsJoint );							//Attach joint information to the general list.
 	}
