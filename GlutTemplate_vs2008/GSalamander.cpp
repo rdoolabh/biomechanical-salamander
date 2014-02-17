@@ -123,7 +123,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 		for( int i=1; i<5;i++){
 			GOdeObject link;										//Create a new body link.
 			link.body = dBodyCreate( world );						//Attach new body to world.
-			link.userData = 1;										//1 means salamander's head/neck/trunk/tail link.
+			link.userData = 2;										//1 means salamander's head/neck/trunk/tail link.
 			if(i<3)
 				dBodySetPosition( link.body, tempx1, tempy1, tempz1+(pow(-1.0,i))*lLength[0]*2.0 );	
 			else
