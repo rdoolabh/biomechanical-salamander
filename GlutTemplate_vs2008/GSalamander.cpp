@@ -83,65 +83,69 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 
 	for( int I = 0; I < nSegments; I++ )			//10 links exactly.
 	{
-		GOdeObject link;										//Create a new body link.
-		link.body = dBodyCreate( world );						//Attach new body to world.
-		link.userData = 1;										//1 means salamander's head/neck/trunk/tail link.
+		GOdeObject *link;										//Create a new body link.
+		link = new GOdeObject;
+		(*link).body = dBodyCreate( world );						//Attach new body to world.
+		(*link).userData = 0;										//1 means salamander's head/neck/trunk/tail (*link).
 		
 		dReal x = prevX + length[I]/2.0;
 		dReal y = sPosition[1];
 		dReal z = sPosition[2];
-		dBodySetPosition( link.body, x, y, z );					//Position link.
+		dBodySetPosition( (*link).body, x, y, z );					//Position (*link).
 		if(I==1){tempx1=x;tempy1=y;tempz1=z;}
 		if(I==5){tempx5=x;tempy5=y;tempz5=z;}
 		
-		dBodySetLinearVel( link.body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
+		dBodySetLinearVel( (*link).body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
 		
 		dMass M;
 		dMassSetBoxTotal( &M, mass[I], length[I], height[I], width[I]);
-		dBodySetMass( link.body, &M );							//Mass distribution.
+		dBodySetMass( (*link).body, &M );							//Mass distribution.
 		
 		dGeomID g;
 		g = dCreateBox( space, length[I], height[I], width[I] );//Geometry.
-		dGeomSetData( g, &(link.userData) );					//Attach a user data pointer to geometry.
-		link.geometries.push_back( g );
-		dGeomSetBody( link.geometries[0], link.body );			//Link body to geometry.
+		dGeomSetData( g, &((*link).userData) );					//Attach a user data pointer to geometry.
+
+		(*link).geometries.push_back( g );
+		dGeomSetBody( (*link).geometries[0], (*link).body );			//(*link) body to geometry.
 		
 		if( I < 2 )			//Head or neck?
-			link.setObjectColor( 0.0, 0.8, 0.5 );				//Change color.
+			(*link).setObjectColor( 0.0, 0.8, 0.5 );				//Change color.
 		else
 		{
 			if( I < 5 )		//Trunk?
-				link.setObjectColor( 0.5, 0.8, 0.0 );
+				(*link).setObjectColor( 0.5, 0.8, 0.0 );
 			else			//Tail.
-				link.setObjectColor( 0.7, 0.0, 0.7 );
+				(*link).setObjectColor( 0.7, 0.0, 0.7 );
 		}
 
-		links.push_back( link );								//Attach new link to the list of links.
+		links.push_back( *link );								//Attach new link to the list of links.
 		prevX += length[I] + jointSpace;						//Making space for joint in between links.
 	}
 	if(lander){
 		for( int i=1; i<5;i++){
-			GOdeObject link;										//Create a new body link.
-			link.body = dBodyCreate( world );						//Attach new body to world.
-			link.userData = 2;										//1 means salamander's head/neck/trunk/tail link.
+			GOdeObject *link;										//Create a new body link.
+			link = new GOdeObject;
+			(*link).body = dBodyCreate( world );						//Attach new body to world.
+			(*link).userData = i;										//1 means salamander's head/neck/trunk/tail (*link).
 			if(i<3)
-				dBodySetPosition( link.body, tempx1, tempy1, tempz1+(pow(-1.0,i))*lLength[0]*2.0 );	
+				dBodySetPosition( (*link).body, tempx1, tempy1, tempz1+(pow(-1.0,i))*lLength[0]*2.0 );	
 			else
-				dBodySetPosition( link.body, tempx5, tempy5, tempz5+(pow(-1.0,i))*lLength[0]*2.0 ); //Position link.
+				dBodySetPosition( (*link).body, tempx5, tempy5, tempz5+(pow(-1.0,i))*lLength[0]*2.0 ); //Position (*link).
 		
-			dBodySetLinearVel( link.body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
+			dBodySetLinearVel( (*link).body, 0.0, 0.0, 0.0 );			//Initial linear velocity.
 		
 			dMass M;
 			dMassSetBoxTotal( &M, lMass[i-1], lLength[i-1], height[i-1], lWidth[i-1]);
-			dBodySetMass( link.body, &M );							//Mass distribution.
-		
+			dBodySetMass( (*link).body, &M );							//Mass distribution.
+
 			dGeomID g;
 			g = dCreateBox( space, lLength[i-1], height[i-1], lWidth[i-1] );//Geometry.
-			dGeomSetData( g, &(link.userData) );					//Attach a user data pointer to geometry.
-			link.geometries.push_back( g );
-			dGeomSetBody( link.geometries[0], link.body );			//Link body to geometry.
+			dGeomSetData( g, &((*link).userData) );					//Attach a user data pointer to geometry.
 
-			links.push_back( link );	
+			(*link).geometries.push_back( g );
+			dGeomSetBody( (*link).geometries[0], (*link).body );			//Link body to geometry.
+
+			links.push_back( (*link) );	
 		}
 	}
 
@@ -205,22 +209,14 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 			dJointSetHingeAnchor( joint, anchor[0], anchor[1], anchor[2] );
 
 			dJointSetHingeAxis( joint, hingeAxis[0], hingeAxis[1], hingeAxis[2] );	//Set axis for hing joint.
-			dJointSetHingeParam( joint, dParamLoStop, 0 );			//Sets limits for hinge angle.
-			dJointSetHingeParam( joint, dParamHiStop, 0 );
+			dJointSetHingeParam( joint, dParamLoStop, -GDrawing::pi/16.0 );			//Sets limits for hinge angle.
+			dJointSetHingeParam( joint, dParamHiStop, GDrawing::pi/16.0 );
 
 			GSJoint gsJoint;										//Create object to hold information on this joint.
 			gsJoint.angleDeformation = 0;							//Initialize angle deformation.
 			gsJoint.joint = joint;									//Attach joint just created.
 		
-			if( lander )
-			{
-				if( I == 0 || I >= 5 )		//Head and tail are in phase = pi.
-					gsJoint.lambda = GDrawing::pi;
-				else
-					gsJoint.lambda = 0.0;	//Joints in trunk are in phase.
-			}
-			else
-				gsJoint.lambda = I * phaseStep;						//If it is a swimmer, joints have different phase.
+			gsJoint.lambda = 0.0;	//Joints in trunk are in phase.
 
 			gsJoint.type = 'l';										//'b' is for body joint.
 
