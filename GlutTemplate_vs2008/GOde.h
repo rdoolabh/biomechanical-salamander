@@ -23,10 +23,6 @@ private:
 	vector< dJointGroupID > jointGroups;	//Group of joints for objects connected.
 	vector< dJointID > joints;				//Joints between bodies.
 	vector< GSalamander > salamanders;		//Salamanders living in ODE.
-
-	dReal psi;								//Angle in joint 1.
-	dReal psi2;								//Angle in joint 2.
-	dReal psi3;								//Angle in joint 3.
 	
 public:
 	GOde(void);
@@ -41,5 +37,6 @@ public:
 	static void drawJoints( const vector< dJointID >* jointsPointer );
 	dJointID getJoint( int id );
 	GOdeObject* getObject( int id );
+	GSalamander* getSalamander( int id );
 };
 

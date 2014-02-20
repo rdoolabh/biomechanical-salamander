@@ -17,19 +17,23 @@ class GSalamander
 	struct GSJoint						//Structure that holds all joint data.
 	{
 		dJointID joint;					//Actual ODE joint object.
-		dReal angleDeformation;			//Change of angle with respect to initial joint angle.
 		dReal lambda;					//Phase for this joint w.r.t. to the previous one (in body order).
-		char type;						//b -> body joint.
+		dReal deltaAngle;				//Whole angle that the joint must sweep while M1 or M2 are active (like a target distance).
+		dReal M1;						//Stores current activation value for 'muscle 1' on this joint (left muscle in body).
+		dReal M2;						//Stores current activation value for 'muscle 2' on this joint (right muscle in body).
+		dReal amplitudeLeft;			//Amplitudes that allow turning (defined only for body segments).
+		dReal amplitudeRight;
+		char type;						//b -> body joint, l -> leg joint.
 	};
 
 	dReal sPosition[3];					//Salamander's head position in real world coordinates.
 	vector< GOdeObject > links;			//Salamander's segments.
 	vector< GSJoint > gsJoints;			//Salamander's joints.
 	dReal freq;							//Neurosignal frequency.
-	dReal amplitude;					//Typical neurosignal amplitude.
-	dReal amplitudeLeft;				//Amplitudes that allow turning.
-	dReal amplitudeRight;				
+	dReal amplitude;					//Typical neurosignal amplitude.				
 	bool lander;						//If true, salamander will walk, otherwise it will swim.
+	dReal bodyMaxAngleDeformation;		//Global max angle deformation for body hinge joints.
+	dReal legMaxAngleDeformation;		//Global max angle deformation for legs hinges.
 
 public:
 	GSalamander(void);
@@ -39,5 +43,6 @@ public:
 	void computeForces( dReal simulationTime, dReal simulationStep );
 	const vector< GOdeObject >* getLinks();
 	void getJoints( vector< dJointID >* joints );
+	void turn( dReal signal );
 };
 

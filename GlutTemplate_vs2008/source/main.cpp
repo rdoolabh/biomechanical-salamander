@@ -77,7 +77,8 @@ Function that gets called for any keypresses.
 void myKey(unsigned char key, int x, int y)
 {
 	float time;
-	dVector3 result;
+	GSalamander *sPtr;
+	sPtr = ode.getSalamander( 0 );
 	switch (key) 
 	{
 		case 'q':
@@ -115,28 +116,20 @@ void myKey(unsigned char key, int x, int y)
 		case '?':
 			GDrawing::plotInstructions();
 			break;
-		//case '1':
-		//	//Body coordinates of a point in world coordinates.
-		//	dBodyGetPosRelPoint( Object[0].Body, 1.0, 0.0, 0.0, result );
-		//	cout<<"Body coordinates of Pw [1,0,0] are Pb = ["<<result[0]<<","<<result[1]<<","<<result[2]<<"]"<<endl;
-		//	break;
-		//case '2':
-		//	//World coordinates of a point in body coordinates.
-		//	dBodyGetRelPointPos( Object[0].Body, 1.0, 0.0, 0.0, result );
-		//	cout<<"World coordinates of Pb [1,0,0] are Pw = ["<<result[0]<<","<<result[1]<<","<<result[2]<<"]"<<endl;
-		//	break;
-		case '3':
-			//Apply torque to the joint.
-			dJointAddHingeTorque( ode.getJoint(0), -10.0 );
+		case '1':
+			//Turn salamander 0 to the left.
+			sPtr->turn( +0.5 );
+			cout<<"Salamander 0 was indicated to turn left..."<<endl;
 			break;
-		case '4':
-			//Get the joint angle between the two bodies [-pi, pi].
-			dVector3 result;
-			dJointGetHingeAnchor( ode.getJoint(0), result );
-			cout << "Angle of body 1 w.r.t. body 2 = " << dJointGetHingeAngle( ode.getJoint(0) ) << endl;
-			cout << "Anchor = " << result[0] << ", " << result[1] << ", " << result[2] << endl;
-			dJointGetHingeAxis( ode.getJoint(0), result );
-			cout << "Axis = " << result[0] << ", " << result[1] << ", " << result[2] << endl;
+		case '2':
+			//Turn salamander 0 to the right.
+			sPtr->turn( -0.5 );
+			cout<<"Salamander 0 was indicated to turn right..."<<endl;
+			break;
+		case '3':
+			//Make salamander 0 go straight.
+			sPtr->turn( 0.0 );
+			cout<<"Salamander 0 was indicated to go straight..."<<endl;
 			break;
 	}
 	glutPostRedisplay();

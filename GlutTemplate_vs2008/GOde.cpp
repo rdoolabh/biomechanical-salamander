@@ -79,10 +79,6 @@ GOde::GOde(void)
 {
 	simulationTime = 0.0;		//Initialize simulator variables.
 	simulationStep = 0.01;
-
-	psi = 0;					//Initial angle change in for joint.
-	psi2 = 0;
-	psi3 = 0;
 }
 
 /*******************************************************************************
@@ -113,7 +109,7 @@ void GOde::initODE()
 	ContactGroup = dJointGroupCreate(0);	//Create a joints container, without specifying size.
 	jointGroups.push_back( dJointGroupCreate( 0 ) );	//Create a group of joints for any living object in ODE.
 
-	dWorldSetGravity( World, 0.0, -9.81, 0.0 );	//Add gravity to this World.
+	//dWorldSetGravity( World, 0.0, -9.81, 0.0 );	//Add gravity to this World.
 
 	//Define error conrrection constants.
 	dWorldSetERP( World, 0.2 );
@@ -268,4 +264,13 @@ GOdeObject* GOde::getObject( int id )
 	assert( id >= 0 && id < objects.size() );	//Check availability.
 
 	return &(objects[id]);
+}
+
+/*******************************************************************************
+Function to get a pointer to a Salamander object, given its index.
+*******************************************************************************/
+GSalamander* GOde::getSalamander( int id )
+{
+	assert( id >= 0 && id < salamanders.size() );	//Check vector boundaries.
+	return &salamanders[id];						//Return the pointer.
 }

@@ -107,6 +107,7 @@
     <ClCompile Include="GDrawing.cpp" />
     <ClCompile Include="GOde.cpp" />
     <ClCompile Include="GOdeObject.cpp" />
+    <ClCompile Include="GSalamander.cpp" />
     <ClCompile Include="source\Ball.cpp" />
     <ClCompile Include="source\BallAux.cpp" />
     <ClCompile Include="source\BallMath.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="GDrawing.h" />
     <ClInclude Include="GOde.h" />
     <ClInclude Include="GOdeObject.h" />
+    <ClInclude Include="GSalamander.h" />
     <ClInclude Include="source\Ball.h" />
     <ClInclude Include="source\BallAux.h" />
     <ClInclude Include="source\BallMath.h" />
