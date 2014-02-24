@@ -1,4 +1,4 @@
-﻿Build started 2/23/2014 4:45:38 PM.
+﻿Build started 2/23/2014 5:21:54 PM.
      1>Project "C:\Users\Owner\Documents\GitHub\biomechanical-salamander\GlutTemplate_vs2008\GlutTemplateEnhanced.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GlutTemplateEnhanced.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -34,4 +34,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.09
+Time Elapsed 00:00:02.13

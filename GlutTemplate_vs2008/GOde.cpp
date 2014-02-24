@@ -40,8 +40,8 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 		
 		else if(*ptr==12)
 		{
-			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
 		}
 		else if(*ptr==11)
 		{
@@ -55,8 +55,8 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 		}
 		else if(*ptr==21)
 		{
-			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
 		}
 		else if(*ptr==32)
 		{
@@ -65,13 +65,13 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 		}
 		else if(*ptr==31)
 		{
-			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
 		}
 		else if(*ptr==42)
 		{
-			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
 		}
 		else if(*ptr==41)
 		{
@@ -162,7 +162,7 @@ void GOde::initODE()
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
 	dVector3 position = { -0.345, 0.1, 0.0 };
-	GSalamander s1( position, 2.0, true );	//Position lander salamander, with frequency 1.0.
+	GSalamander s1( position, 2.0, false );	//Position lander salamander, with frequency 1.0.
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	

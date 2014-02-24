@@ -116,12 +116,12 @@ void myKey(unsigned char key, int x, int y)
 			break;
 		case '1':
 			//Turn salamander 0 to the left.
-			sPtr->turn( +0.5 );
+			sPtr->turn( +0.8);
 			cout<<"Salamander 0 was indicated to turn left..."<<endl;
 			break;
 		case '2':
 			//Turn salamander 0 to the right.
-			sPtr->turn( -0.5 );
+			sPtr->turn( -0.8 );
 			cout<<"Salamander 0 was indicated to turn right..."<<endl;
 			break;
 		case '3':

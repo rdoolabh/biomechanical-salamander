@@ -186,12 +186,12 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 			dBodySetPosition( (*link).body, 
 				tempx1, 
 				tempy1, 
-				tempz1 + pow(-1.0, i) * ( width[foreLimbsAttachedTo]/2.0 + lLength[0]/2.0 + jointSpace ) );	
+				tempz1 + pow(-1.0, i) * ( width[foreLimbsAttachedTo] + lLength[0] + jointSpace ) );	
 		else
 			dBodySetPosition( (*link).body, 
 				tempx5, 
 				tempy5, 
-				tempz5 + pow(-1.0, i) * ( width[hindLimbsAttachedTo]/2.0 + lLength[0]/2.0 + jointSpace ) ); //Position (*link).
+				tempz5 + pow(-1.0, i) * ( width[hindLimbsAttachedTo] + lLength[0] + jointSpace ) ); //Position (*link).
 		
 		dBodySetLinearVel( (*link).body, 0.0, 0.0, 0.0 );	//Initial linear velocity.
 		
@@ -363,7 +363,7 @@ void GSalamander::computeForces( dReal simulationTime, dReal simulationStep )
 			
 		desiredVelocity = gsJoints[I].deltaAngle * freq / 2.0 * ( Ml + Mr );
 		dJointSetHingeParam( gsJoints[I].joint, dParamVel, desiredVelocity );
-		dJointSetHingeParam( gsJoints[I].joint, dParamFMax, 0.005 );
+		dJointSetHingeParam( gsJoints[I].joint, dParamFMax, 0.01 );
 			
 		/*cout << "Delta Angle: (" << gsJoints[I].deltaAngle << ") Psi: (" << dJointGetHingeAngle(gsJoints[I].joint) << ") Velocity: (" << desiredVelocity << ")" << endl;
 		cout << "Ml: " << Ml << "      Mr: " << Mr << endl;*/
