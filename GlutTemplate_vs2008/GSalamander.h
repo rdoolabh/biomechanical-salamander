@@ -34,6 +34,7 @@ class GSalamander
 	bool lander;						//If true, salamander will walk, otherwise it will swim.
 	dReal bodyMaxAngleDeformation;		//Global max angle deformation for body hinge joints.
 	dReal legMaxAngleDeformation;		//Global max angle deformation for legs hinges.
+	public: dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
 
 public:
 	GSalamander(void);

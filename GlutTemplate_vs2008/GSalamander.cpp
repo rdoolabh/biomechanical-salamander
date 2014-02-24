@@ -83,6 +83,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	dReal tempy5=0.0;
 	dReal tempz5=0.0;
 
+	//creating 10 segments for trunk
 	for( int I = 0; I < nSegments; I++ )			//10 links exactly.
 	{
 		GOdeObject *link;											//Create a new body link.
@@ -128,6 +129,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	dReal hingeAxis[] = { 0.0, 1.0, 0.0 };						//Hinge axis is parallell to y axis.
 	dReal phaseStep = 2.0*GDrawing::pi/9.0;						//In case it is swimmer. 
 
+	//create joints for trunk
 	for( int I = 0; I < nSegments-1; I++ )
 	{
 		dJointID joint;
@@ -177,7 +179,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 		GOdeObject *link;										//Create a new leg link.
 		link = new GOdeObject;
 		(*link).body = dBodyCreate( world );					//Attach new leg's body to world.
-		(*link).userData = i;									//1-4 means salamander's leg segments.
+		(*link).userData = i* 10;									//1-4 means salamander's leg segments.
 
 		//Decide where to attach legs to main salamander's body.
 		if( i < 3 )
@@ -264,41 +266,110 @@ void GSalamander::computeForces( dReal simulationTime, dReal simulationStep )
 
 	dReal Ml, Mr;						//Neurosignals for body joints (left and right).
 	dReal desiredVelocity;				//Resulting desired velocity.
-	dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
+	//dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
 
 	for( unsigned I = 0; I < gsJoints.size(); I ++ )
 	{
-		if( gsJoints[I].type == 'b' )													//Is it a body joint?
+		
+		Ml = max( sin( freq*simulationTime - gsJoints[I].lambda ), 0.0 );			//Compute new neurosignals.
+		Mr = max( sin( freq*simulationTime - gsJoints[I].lambda + GDrawing::pi ), 0.0 );
+
+		//Detect when a change of activation signal has happened from left to right (and viceversa).
+		if( Ml > 0.0 && gsJoints[I].M1 <= 0.0 )										//Left signal just got activated beyond 0?
 		{
-			Ml = max( sin( freq*simulationTime - gsJoints[I].lambda ), 0.0 );			//Compute new neurosignals.
-			Mr = max( sin( freq*simulationTime - gsJoints[I].lambda + GDrawing::pi ), 0.0 );
-
-			//Detect when a change of activation signal has happened from left to right (and viceversa).
-			if( Ml > 0.0 && gsJoints[I].M1 <= 0.0 )										//Left signal just got activated beyond 0?
+			targetDeformationAngle = gsJoints[I].amplitudeLeft * bodyMaxAngleDeformation;				//New target angle.
+			gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance..
+		}
+		else
+		{
+			if( Mr > 0.0 && gsJoints[I].M2 <= 0.0 )									//Right signal just got activated beyond 0?
 			{
-				targetDeformationAngle = gsJoints[I].amplitudeLeft * bodyMaxAngleDeformation;				//New target angle.
-				gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance..
+				targetDeformationAngle = -gsJoints[I].amplitudeRight * bodyMaxAngleDeformation;				//New target angle.
+				gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance.
 			}
-			else
+		}
+
+
+		if(gsJoints[I].type == 'l')
+		{
+
+			dBodyID bodyID = dJointGetBody(gsJoints[I].joint,1);
+
+			for(int i = 0; i < links.size(); i++)
 			{
-				if( Mr > 0.0 && gsJoints[I].M2 <= 0.0 )									//Right signal just got activated beyond 0?
+				if(links[i].body == bodyID)
 				{
-					targetDeformationAngle = -gsJoints[I].amplitudeRight * bodyMaxAngleDeformation;				//New target angle.
-					gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance.
-				}
-			}
 
-			//Update joint neurosignals.
-			gsJoints[I].M1 = Ml;
-			gsJoints[I].M2 = Mr;
+					//cout << "userData: " << links[i].userData << " deltaAngle: " << gsJoints[I].deltaAngle << endl;
+					// first leg
+					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 10 && links[i].userData< 20)
+					{
+						//cout << "userData: " << links[i].userData << endl;
+						links[i].userData = 11;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 10 && links[i].userData< 20)
+					{
+						//cout << "userData: " << links[i].userData << endl;
+						links[i].userData = 12;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+
+					// second leg
+					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 20 && links[i].userData< 30)
+					{
+						links[i].userData = 21;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 20 && links[i].userData< 30)
+					{
+						links[i].userData = 22;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+
+					// third leg
+					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 30 && links[i].userData< 40)
+					{
+						links[i].userData = 31;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 30 && links[i].userData< 40)
+					{
+						links[i].userData = 32;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+
+					// fourth leg
+					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 40 && links[i].userData< 50)
+					{
+						links[i].userData = 41;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 40 && links[i].userData< 50)
+					{
+						links[i].userData = 42;
+						dGeomSetData(links[i].geometries[0],&links[i].userData);
+					}
+
+				}
+
+			}
+		}
+		
+
+		//Update joint neurosignals.
+		gsJoints[I].M1 = Ml;
+		gsJoints[I].M2 = Mr;
 			
-			desiredVelocity = gsJoints[I].deltaAngle * freq / 2.0 * ( Ml + Mr );
-			dJointSetHingeParam( gsJoints[I].joint, dParamVel, desiredVelocity );
-			dJointSetHingeParam( gsJoints[I].joint, dParamFMax, 0.005 );
+		desiredVelocity = gsJoints[I].deltaAngle * freq / 2.0 * ( Ml + Mr );
+		dJointSetHingeParam( gsJoints[I].joint, dParamVel, desiredVelocity );
+		dJointSetHingeParam( gsJoints[I].joint, dParamFMax, 0.005 );
 			
-			/*cout << "Delta Angle: (" << gsJoints[I].deltaAngle << ") Psi: (" << dJointGetHingeAngle(gsJoints[I].joint) << ") Velocity: (" << desiredVelocity << ")" << endl;
-			cout << "Ml: " << Ml << "      Mr: " << Mr << endl;*/
-		}	 
+		/*cout << "Delta Angle: (" << gsJoints[I].deltaAngle << ") Psi: (" << dJointGetHingeAngle(gsJoints[I].joint) << ") Velocity: (" << desiredVelocity << ")" << endl;
+		cout << "Ml: " << Ml << "      Mr: " << Mr << endl;*/
+			 
+
+
 	}
 }
 

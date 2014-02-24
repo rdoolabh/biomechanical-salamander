@@ -33,5 +33,10 @@ public:
 	static void ODEToOpenGLMatrix( const dReal* p, const dReal* R, dReal* M );
 	void setObjectColor( float r, float g, float b );
 	void drawGeometries() const;
+
+	/*const GOdeObject* getGOdeObect()
+	{
+		return this;
+	}*/
 };
 

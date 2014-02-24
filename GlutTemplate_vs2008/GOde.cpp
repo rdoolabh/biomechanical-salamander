@@ -1,4 +1,6 @@
 #include "GOde.h"
+#include "GSalamander.h"
+
 
 /*******************************************************************************
 Special variables that cannot be included inside the GOde class due to problems
@@ -14,6 +16,7 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 {
 	int I;					//A temporary index for each contact.
 	const int MAX_CONTACTS = 5;
+	//GOde ode;
 
 	//Get the dynamics body for each potentially colliding geometry.
 	dBodyID b1 = dGeomGetBody( o1 );
@@ -23,33 +26,61 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	//Create an array of dContact objects to hold the contact joints.
 	dContact contacts[ MAX_CONTACTS ];
 
+	//cout << "Here is the *ptr number: " << *ptr << endl;
 	//Initialize contact structures.
 	for( I = 0; I < MAX_CONTACTS; I++ )
 	{
 		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+
 		if(*ptr==0)
 		{
 			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
 		}
-		else if(*ptr==1)
+		
+		else if(*ptr==12)
 		{
-			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
 		}
-		else if(*ptr==2)
+		else if(*ptr==11)
 		{
 			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
 		}
-		else if(*ptr==3)
+		else if(*ptr==22)
 		{
-			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+		}
+		else if(*ptr==21)
+		{
+			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+		}
+		else if(*ptr==32)
+		{
+			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.;			//Friction in direction 2 to mu.
+		}
+		else if(*ptr==31)
+		{
+			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+		}
+		else if(*ptr==42)
+		{
+			contacts[I].surface.mu = 0.07;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu2 = 0.07;			//Friction in direction 2 to mu.
+		}
+		else if(*ptr==41)
+		{
+			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
 		}
 		else
 		{
-			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
+			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
 		}
 			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
@@ -109,7 +140,7 @@ void GOde::initODE()
 	ContactGroup = dJointGroupCreate(0);	//Create a joints container, without specifying size.
 	jointGroups.push_back( dJointGroupCreate( 0 ) );	//Create a group of joints for any living object in ODE.
 
-	//dWorldSetGravity( World, 0.0, -9.81, 0.0 );	//Add gravity to this World.
+	dWorldSetGravity( World, 0.0, -9.81, 0.0 );	//Add gravity to this World.
 
 	//Define error conrrection constants.
 	dWorldSetERP( World, 0.2 );
@@ -131,7 +162,7 @@ void GOde::initODE()
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
 	dVector3 position = { -0.345, 0.1, 0.0 };
-	GSalamander s1( position, 1.0, true );	//Position lander salamander, with frequency 1.0.
+	GSalamander s1( position, 2.0, true );	//Position lander salamander, with frequency 1.0.
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	

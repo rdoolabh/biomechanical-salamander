@@ -17,14 +17,12 @@ Composite objects in ODE.
 
 using namespace std;
 
-
-//hello
-
 #include "Ball.h"
 #include "FrameSaver.h"
 #include "Timer.h"
 #include "GDrawing.h"
 #include "GOde.h"
+
 
 ///////////////////////////  OpenGL global variables ///////////////////////////
 FrameSaver g_frameSaver;
@@ -58,7 +56,7 @@ double g_time = 0.0 ;
 
 /////////////////////////// ODE Global Variables ///////////////////////////////
 
-GOde ode;							//Create the simulator.
+GOde ode;						//Create the simulator.
 
 ////////////////////////////////////////////////////////////////////////////////
 
