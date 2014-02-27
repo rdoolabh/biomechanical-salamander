@@ -216,10 +216,35 @@ void display(void)
 	glTranslated( 0.0, -0.005, 0.0 );
 	glScaled( 20.0, 0.01, 20.0 );
 	GDrawing::setColor( 0.5, 0.5, 0.55 );
-	GDrawing::drawCube();
+	//GDrawing::drawCube();
 	glPopMatrix();
 
-	////////////////////////////////////////////////////////////////////////////
+		//////////////////////// draw chessboard ///////////////////
+
+	//draw black
+	glPushMatrix();						
+	glTranslated( -2.0, -0.005, -5.0 );
+	GDrawing::setColor( 0.0, 0.0, 0.0 );
+	glScaled( 0.5, 0.01, 0.5 );
+	for(int i=0; i <50; i++)
+	{
+		for(int j=0; j<50; j++)
+		{
+			GDrawing::drawCube();
+			glTranslated( 2, 0.0, 0.0 );
+		}
+		glTranslated( -99-2*(i%2), 0.0, 1.0 );
+	}
+	glPopMatrix();
+
+
+	////////////////// Draw the Water /////////////////////////////
+	glPushMatrix();						
+	glTranslated( -12.25, -0.005, 7.25 );
+	glScaled( 20.0, 0.01, 25.0 );
+	GDrawing::setColor( 0.0, 0.0, 0.55 );
+	GDrawing::drawCube();
+	glPopMatrix();
 
 	glutSwapBuffers();
 	if( g_recording == 1)
