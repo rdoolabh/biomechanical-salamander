@@ -93,11 +93,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	dReal tempy5=0.0;
 	dReal tempz5=0.0;
 
-<<<<<<< HEAD
-	//creating 10 segments for trunk
-=======
 	//Creating 10 segments for trunk
->>>>>>> Last Salamander Working
 	for( int I = 0; I < nSegments; I++ )			//10 links exactly.
 	{
 		GOdeObject *link;											//Create a new body link.
@@ -145,11 +141,7 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	dReal hingeAxis[] = { 0.0, 1.0, 0.0 };						//Hinge axis is parallell to y axis.
 	dReal phaseStep = 2.0*GDrawing::pi/9.0;						//In case it is swimmer. 
 
-<<<<<<< HEAD
-	//create joints for trunk
-=======
 	//Create joints for trunk
->>>>>>> Last Salamander Working
 	for( int I = 0; I < nSegments-1; I++ )
 	{
 		dJointID joint;
@@ -212,13 +204,9 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 		legNumber <<= 12;										//Leg encoding is of the form i0, indicating not friction.
 		xCode |= legNumber;
 		(*link).body = dBodyCreate( world );					//Attach new leg's body to world.
-<<<<<<< HEAD
-		(*link).userData = i* 10;									//1-4 means salamander's leg segments.
-=======
 		(*link).userData = xCode;								//Now, user data contains information in the form 0xA0CD.
 
 		lowerLimbsAttachedTo[i-1] = i + nSegments - 1;			//Recall indexes of upper limb links (left, right, left, right).
->>>>>>> Last Salamander Working
 
 		//Decide where to attach legs to main salamander's body.
 		//It creates leg to the left ( positive z axis ) first, then right.
@@ -226,20 +214,12 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 			dBodySetPosition( (*link).body, 
 				tempx1, 
 				tempy1, 
-<<<<<<< HEAD
-				tempz1 + pow(-1.0, i) * ( width[foreLimbsAttachedTo] + lLength[0] + jointSpace ) );	
-=======
 				tempz1 + pow(-1.0, i-1) * ( width[foreLimbsAttachedTo]/2.0 + lLength[i-1]/2.0 + jointSpace ) );	
->>>>>>> Last Salamander Working
 		else
 			dBodySetPosition( (*link).body, 
 				tempx5, 
 				tempy5, 
-<<<<<<< HEAD
-				tempz5 + pow(-1.0, i) * ( width[hindLimbsAttachedTo] + lLength[0] + jointSpace ) ); //Position (*link).
-=======
 				tempz5 + pow(-1.0, i-1) * ( width[hindLimbsAttachedTo]/2.0 + lLength[i-1]/2.0 + jointSpace ) ); //Position (*link).
->>>>>>> Last Salamander Working
 		
 		dBodySetLinearVel( (*link).body, 0.0, 0.0, 0.0 );	//Initial linear velocity.
 		
@@ -438,25 +418,11 @@ void GSalamander::computeForces( dReal simulationTime, dReal simulationStep )
 
 	dReal M1, M2;						//Neurosignals for body joints (left and right).
 	dReal desiredVelocity;				//Resulting desired velocity.
-	//dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
+	dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
 
 	for( unsigned I = 0; I < gsJoints.size(); I ++ )
 	{
 		
-<<<<<<< HEAD
-		Ml = max( sin( freq*simulationTime - gsJoints[I].lambda ), 0.0 );			//Compute new neurosignals.
-		Mr = max( sin( freq*simulationTime - gsJoints[I].lambda + GDrawing::pi ), 0.0 );
-
-		//Detect when a change of activation signal has happened from left to right (and viceversa).
-		if( Ml > 0.0 && gsJoints[I].M1 <= 0.0 )										//Left signal just got activated beyond 0?
-		{
-			targetDeformationAngle = gsJoints[I].amplitudeLeft * bodyMaxAngleDeformation;				//New target angle.
-			gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance..
-		}
-		else
-		{
-			if( Mr > 0.0 && gsJoints[I].M2 <= 0.0 )									//Right signal just got activated beyond 0?
-=======
 		M1 = max( sin( freq*simulationTime - gsJoints[I].lambda ), 0.0 );				//Compute new neurosignals.
 		M2 = max( sin( freq*simulationTime - gsJoints[I].lambda + GDrawing::pi ), 0.0 );
 
@@ -464,100 +430,18 @@ void GSalamander::computeForces( dReal simulationTime, dReal simulationStep )
 		{
 			//Detect when a change of activation signal has happened from left to right (and vice versa).
 			if( M1 > 0.0 && gsJoints[I].M1 <= 0.0 )										//Left signal just got activated beyond 0?
->>>>>>> Last Salamander Working
 			{
-				targetDeformationAngle = -gsJoints[I].amplitudeRight * bodyMaxAngleDeformation;				//New target angle.
-				gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance.
+				targetDeformationAngle = gsJoints[I].amplitudeLeft * bodyMaxAngleDeformation;				//New target angle.
+				gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance..
 			}
-		}
-
-
-		if(gsJoints[I].type == 'l')
-		{
-
-			dBodyID bodyID = dJointGetBody(gsJoints[I].joint,1);
-
-			for(int i = 0; i < links.size(); i++)
+			else
 			{
-<<<<<<< HEAD
-				if(links[i].body == bodyID)
-=======
 				if( M2 > 0.0 && gsJoints[I].M2 <= 0.0 )									//Right signal just got activated beyond 0?
->>>>>>> Last Salamander Working
 				{
-
-					//cout << "userData: " << links[i].userData << " deltaAngle: " << gsJoints[I].deltaAngle << endl;
-					// first leg
-					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 10 && links[i].userData< 20)
-					{
-						//cout << "userData: " << links[i].userData << endl;
-						links[i].userData = 11;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 10 && links[i].userData< 20)
-					{
-						//cout << "userData: " << links[i].userData << endl;
-						links[i].userData = 12;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-
-					// second leg
-					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 20 && links[i].userData< 30)
-					{
-						links[i].userData = 21;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 20 && links[i].userData< 30)
-					{
-						links[i].userData = 22;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-
-					// third leg
-					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 30 && links[i].userData< 40)
-					{
-						links[i].userData = 31;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 30 && links[i].userData< 40)
-					{
-						links[i].userData = 32;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-
-					// fourth leg
-					if(gsJoints[I].deltaAngle > 0 && links[i].userData >= 40 && links[i].userData< 50)
-					{
-						links[i].userData = 41;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-					else if(gsJoints[I].deltaAngle < 0 && links[i].userData >= 40 && links[i].userData< 50)
-					{
-						links[i].userData = 42;
-						dGeomSetData(links[i].geometries[0],&links[i].userData);
-					}
-
+					targetDeformationAngle = -gsJoints[I].amplitudeRight * bodyMaxAngleDeformation;				//New target angle.
+					gsJoints[I].deltaAngle = targetDeformationAngle - dJointGetHingeAngle( gsJoints[I].joint );	//New angular distance.
 				}
-
 			}
-<<<<<<< HEAD
-		}
-		
-
-		//Update joint neurosignals.
-		gsJoints[I].M1 = Ml;
-		gsJoints[I].M2 = Mr;
-			
-		desiredVelocity = gsJoints[I].deltaAngle * freq / 2.0 * ( Ml + Mr );
-		dJointSetHingeParam( gsJoints[I].joint, dParamVel, desiredVelocity );
-		dJointSetHingeParam( gsJoints[I].joint, dParamFMax, 0.01 );
-			
-		/*cout << "Delta Angle: (" << gsJoints[I].deltaAngle << ") Psi: (" << dJointGetHingeAngle(gsJoints[I].joint) << ") Velocity: (" << desiredVelocity << ")" << endl;
-		cout << "Ml: " << Ml << "      Mr: " << Mr << endl;*/
-			 
-
-
-=======
 		
 			//Compute desired velocity, depending on current time within [0, pi] for a given joint.
 			desiredVelocity = gsJoints[I].deltaAngle * freq / 2.0 * ( M1 + M2 );
@@ -619,7 +503,6 @@ void GSalamander::computeForces( dReal simulationTime, dReal simulationStep )
 		//Update joint neurosignals.
 		gsJoints[I].M1 = M1;
 		gsJoints[I].M2 = M2;
->>>>>>> Last Salamander Working
 	}
 }
 

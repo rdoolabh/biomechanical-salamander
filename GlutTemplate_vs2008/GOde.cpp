@@ -16,7 +16,6 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 {
 	int I;					//A temporary index for each contact.
 	const int MAX_CONTACTS = 5;
-	//GOde ode;
 
 	//Get the dynamics body for each potentially colliding geometry.
 	dBodyID b1 = dGeomGetBody( o1 );
@@ -32,59 +31,6 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	for( I = 0; I < MAX_CONTACTS; I++ )
 	{
 		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
-<<<<<<< HEAD
-
-		if(*ptr==0)
-		{
-			contacts[I].surface.mu = 0.0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		}
-		
-		else if(*ptr==12)
-		{
-			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==11)
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==22)
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==21)
-		{
-			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==32)
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==31)
-		{
-			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==42)
-		{
-			contacts[I].surface.mu = 0.04;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0.04;			//Friction in direction 2 to mu.
-		}
-		else if(*ptr==41)
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-		}
-		else
-		{
-			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
-			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
-=======
 		contacts[I].surface.mu = 0.0;			//0 friction for general collisions.
 		contacts[I].surface.mu2 = 0.0;			//Update this value according to special cases (look below).
 
@@ -114,7 +60,6 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 					}
 				}
 			}
->>>>>>> Last Salamander Working
 		}
 		
 		contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
@@ -198,13 +143,8 @@ void GOde::initODE()
 
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
-<<<<<<< HEAD
-	dVector3 position = { -0.345, 0.1, 0.0 };
-	GSalamander s1( position, 2.0, false );	//Position lander salamander, with frequency 1.0.
-=======
 	dVector3 position = { -0.345, 0.045, 0.0 };
 	GSalamander s1( position, 2.0, true );	//Position lander salamander, with frequency 1.0.
->>>>>>> Last Salamander Working
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	

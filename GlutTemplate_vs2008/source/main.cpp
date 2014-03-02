@@ -116,20 +116,12 @@ void myKey(unsigned char key, int x, int y)
 			break;
 		case '1':
 			//Turn salamander 0 to the left.
-<<<<<<< HEAD
-			sPtr->turn( +0.8);
-=======
 			sPtr->turn( +1.0);
->>>>>>> Last Salamander Working
 			cout<<"Salamander 0 was indicated to turn left..."<<endl;
 			break;
 		case '2':
 			//Turn salamander 0 to the right.
-<<<<<<< HEAD
-			sPtr->turn( -0.8 );
-=======
 			sPtr->turn( -1.0 );
->>>>>>> Last Salamander Working
 			cout<<"Salamander 0 was indicated to turn right..."<<endl;
 			break;
 		case '3':
@@ -274,33 +266,6 @@ void display(void)
 	////////////////////// Draw the ode objects in World ////////////////////////
 	ode.drawObjects();
 
-<<<<<<< HEAD
-	glPushMatrix();						//Draw the collision plane.
-	glTranslated( 0.0, -0.005, 0.0 );
-	glScaled( 20.0, 0.01, 20.0 );
-	GDrawing::setColor( 0.5, 0.5, 0.55 );
-	//GDrawing::drawCube();
-	glPopMatrix();
-
-		//////////////////////// draw chessboard ///////////////////
-
-	//draw black
-	glPushMatrix();						
-	glTranslated( -2.0, -0.005, -5.0 );
-	GDrawing::setColor( 0.0, 0.0, 0.0 );
-	glScaled( 0.5, 0.01, 0.5 );
-	for(int i=0; i <50; i++)
-	{
-		for(int j=0; j<50; j++)
-		{
-			GDrawing::drawCube();
-			glTranslated( 2, 0.0, 0.0 );
-		}
-		glTranslated( -99-2*(i%2), 0.0, 1.0 );
-	}
-	glPopMatrix();
-
-=======
 	//////////////////////// draw chessboard ///////////////////
 
 	//draw black
@@ -319,17 +284,12 @@ void display(void)
 	}
 	glPopMatrix();
 
->>>>>>> Last Salamander Working
 
 	////////////////// Draw the Water /////////////////////////////
 	glPushMatrix();						
 	glTranslated( -12.25, -0.005, 7.25 );
 	glScaled( 20.0, 0.01, 25.0 );
-<<<<<<< HEAD
-	GDrawing::setColor( 0.0, 0.0, 0.55 );
-=======
 	GDrawing::setColor( 0.0, 0.35, 0.75 );
->>>>>>> Last Salamander Working
 	GDrawing::drawCube();
 	glPopMatrix();
 
