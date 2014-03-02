@@ -21,7 +21,8 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	//Get the dynamics body for each potentially colliding geometry.
 	dBodyID b1 = dGeomGetBody( o1 );
 	dBodyID b2 = dGeomGetBody( o2 );
-	int *ptr=(int*)dGeomGetData(o1);
+	unsigned short *ptr1 = (unsigned short*)dGeomGetData( o1 );		//Get data from first geometry.
+	unsigned short *ptr2 = (unsigned short*)dGeomGetData( o2 );		//Get data from second geometry.
 
 	//Create an array of dContact objects to hold the contact joints.
 	dContact contacts[ MAX_CONTACTS ];
@@ -31,6 +32,7 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 	for( I = 0; I < MAX_CONTACTS; I++ )
 	{
 		contacts[I].surface.mode = dContactBounce | dContactSoftCFM;
+<<<<<<< HEAD
 
 		if(*ptr==0)
 		{
@@ -82,10 +84,42 @@ void nearCallBack( void *data, dGeomID o1, dGeomID o2 )
 		{
 			contacts[I].surface.mu = 0;		//0: frictionless, dInfinity: never slips.
 			contacts[I].surface.mu2 = 0;			//Friction in direction 2 to mu.
+=======
+		contacts[I].surface.mu = 0.0;			//0 friction for general collisions.
+		contacts[I].surface.mu2 = 0.0;			//Update this value according to special cases (look below).
+
+		//Check all possible cases of collision among geometries.
+		if( ptr1 != NULL && ptr2 != NULL )		//Are data attached to geometries that are colliding?
+		{
+			if( *ptr1 == 0x00FF || *ptr2 == 0x00FF )	//Collision with ground?
+			{
+				int salamanderPart;					//Indicates if it is a calf or body/upper leg segment.
+				int friction;						//Get the friction 4-bit code from 0xABCD.
+				unsigned short *ptr;				//Just to recognize which part of the salamander is colliding.
+
+				if( *ptr1 != 0x00FF)				//Is the first body part of salamander?
+					ptr = ptr1;
+				else								//Or is it the second body?
+					ptr = ptr2;
+
+				salamanderPart = (int)( ((*ptr) & 0xF000) >> 12 );	//Shift bits: (0=body, 1-4=upper-leg, 5-8=calf)
+				friction = (int)( ((*ptr) & 0x0F00) >> 8 );			//Shift bits to the right here too.
+
+				if( friction > 0 )					//Should we apply friction to this part of the salamander?
+				{
+					if( salamanderPart >= 5 && salamanderPart <= 8 )//Is it a calf?
+					{
+						contacts[I].surface.mu = 1.05;				//0: frictionless, dInfinity: never slips.
+						contacts[I].surface.mu2 = 1.05;				//Friction in direction 2 to mu.
+					}
+				}
+			}
+>>>>>>> Last Salamander Working
 		}
-			contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
-			contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
-			contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
+		
+		contacts[I].surface.bounce = 0.01;		//0: not bouncy, 1: max. bouncyness.
+		contacts[I].surface.bounce_vel = 0.1;	//Minimum incoming velocity for producting bouncyness.
+		contacts[I].surface.soft_cfm = 0.01;	//Softness for maintaining joint constraints.
 	}
 
 	//Now, do the actual collision test, passing as parameters the address of
@@ -157,12 +191,20 @@ void GOde::initODE()
 
 	//Create a collision plane and add it to space. The next parameters are the
 	//literal components of ax + by + cz = d.
-	dCreatePlane( Space, 0.0, 1.0, 0.0, 0.0 );
+	ground.body = NULL;			//Plane has not body (with mass).
+	ground.userData = 0x00FF;	//The code for collisions for ground is 255.
+	ground.geometries.push_back( dCreatePlane( Space, 0.0, 0.045, 0.0, 0.0 ) );
+	dGeomSetData( ground.geometries[0], &ground.userData );
 
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
+<<<<<<< HEAD
 	dVector3 position = { -0.345, 0.1, 0.0 };
 	GSalamander s1( position, 2.0, false );	//Position lander salamander, with frequency 1.0.
+=======
+	dVector3 position = { -0.345, 0.045, 0.0 };
+	GSalamander s1( position, 2.0, true );	//Position lander salamander, with frequency 1.0.
+>>>>>>> Last Salamander Working
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	
@@ -271,7 +313,7 @@ void GOde::drawJoints( const vector< dJointID >* jointsPointer )
 		glPushMatrix();						//Store current ModelView matrix.
 		GDrawing::setColor( 1.0, 1.0, 1.0 );
 		glTranslated( anchor[0], anchor[1], anchor[2] );
-		glScaled( 0.01, 0.01, 0.01 );
+		glScaled( 0.006, 0.006, 0.006 );
 		GDrawing::drawSphere();				//Draw a sphere wher the anchor is.
 		glPopMatrix();						//Restore previous pipeline state.
 	}

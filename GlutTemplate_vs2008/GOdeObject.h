@@ -28,7 +28,7 @@ public:
 
 	dBodyID body;					//Object's dynamics body.
 	vector< dGeomID > geometries;	//Object's geometries potentially attached to its body.
-	int userData;					//This allows to store a key number to identify geometries during collisions.
+	unsigned short userData;		//This allows to store a key number to identify geometries during collisions.
 
 	static void ODEToOpenGLMatrix( const dReal* p, const dReal* R, dReal* M );
 	void setObjectColor( float r, float g, float b );

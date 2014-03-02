@@ -49,7 +49,7 @@ typedef char STR[STRLEN];
 #define Z 2
 
 // The eye point and look-at point.
-double g_eye[3] = {0.0, 40.0, 10.0};
+double g_eye[3] = {0.0, 40.0, 1.0};
 double g_ref[3] = {0.0, 0.0, 0.0};
 double g_time = 0.0 ;
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,12 +116,20 @@ void myKey(unsigned char key, int x, int y)
 			break;
 		case '1':
 			//Turn salamander 0 to the left.
+<<<<<<< HEAD
 			sPtr->turn( +0.8);
+=======
+			sPtr->turn( +1.0);
+>>>>>>> Last Salamander Working
 			cout<<"Salamander 0 was indicated to turn left..."<<endl;
 			break;
 		case '2':
 			//Turn salamander 0 to the right.
+<<<<<<< HEAD
 			sPtr->turn( -0.8 );
+=======
+			sPtr->turn( -1.0 );
+>>>>>>> Last Salamander Working
 			cout<<"Salamander 0 was indicated to turn right..."<<endl;
 			break;
 		case '3':
@@ -129,6 +137,60 @@ void myKey(unsigned char key, int x, int y)
 			sPtr->turn( 0.0 );
 			cout<<"Salamander 0 was indicated to go straight..."<<endl;
 			break;
+		case GLUT_KEY_LEFT:
+			//Left arrow.
+			cout<<"detected"<<endl;
+			g_eye[X] -= 0.0013;
+			g_ref[X] -= 0.0013;
+			break;
+		case GLUT_KEY_RIGHT:
+			//Right arrow.
+			g_eye[X] += 0.0013;
+			g_ref[X] += 0.0013;
+			break;
+		case GLUT_KEY_DOWN:
+			//Down arrow.
+			g_eye[Z] += 0.0013;
+			g_ref[Z] += 0.0013;
+		case GLUT_KEY_UP:
+			//Up arrow.
+			g_eye[Z] -= 0.0013;
+			g_ref[Z] -= 0.0013;
+			break;
+
+	}
+	glutPostRedisplay();
+}
+
+/*******************************************************************************
+Function to process special keys.
+*******************************************************************************/
+void mySpecialKey(int key, int x, int y)
+{
+	double displacement = 0.0035;
+	switch (key) 
+	{
+		case GLUT_KEY_LEFT:
+			//Left arrow.
+			g_eye[X] -= displacement;
+			g_ref[X] -= displacement;
+			break;
+		case GLUT_KEY_RIGHT:
+			//Right arrow.
+			g_eye[X] += displacement;
+			g_ref[X] += displacement;
+			break;
+		case GLUT_KEY_DOWN:
+			//Down arrow.
+			g_eye[Z] += displacement;
+			g_ref[Z] += displacement;
+			break;
+		case GLUT_KEY_UP:
+			//Up arrow.
+			g_eye[Z] -= displacement;
+			g_ref[Z] -= displacement;
+			break;
+
 	}
 	glutPostRedisplay();
 }
@@ -212,6 +274,7 @@ void display(void)
 	////////////////////// Draw the ode objects in World ////////////////////////
 	ode.drawObjects();
 
+<<<<<<< HEAD
 	glPushMatrix();						//Draw the collision plane.
 	glTranslated( 0.0, -0.005, 0.0 );
 	glScaled( 20.0, 0.01, 20.0 );
@@ -237,12 +300,36 @@ void display(void)
 	}
 	glPopMatrix();
 
+=======
+	//////////////////////// draw chessboard ///////////////////
+
+	//draw black
+	glPushMatrix();						
+	glTranslated( -2.0, -0.005, -5.0 );
+	GDrawing::setColor( 0.4, 0.4, 0.4 );
+	glScaled( 0.5, 0.01, 0.5 );
+	for(int i=0; i <50; i++)
+	{
+		for(int j=0; j<50; j++)
+		{
+			GDrawing::drawCube();
+			glTranslated( 2, 0.0, 0.0 );
+		}
+		glTranslated( -99-2*(i%2), 0.0, 1.0 );
+	}
+	glPopMatrix();
+
+>>>>>>> Last Salamander Working
 
 	////////////////// Draw the Water /////////////////////////////
 	glPushMatrix();						
 	glTranslated( -12.25, -0.005, 7.25 );
 	glScaled( 20.0, 0.01, 25.0 );
+<<<<<<< HEAD
 	GDrawing::setColor( 0.0, 0.0, 0.55 );
+=======
+	GDrawing::setColor( 0.0, 0.35, 0.75 );
+>>>>>>> Last Salamander Working
 	GDrawing::drawCube();
 	glPopMatrix();
 
@@ -383,6 +470,7 @@ int main(int argc, char** argv)
 	glutIdleFunc(idleCB) ;
 	glutReshapeFunc (myReshape);
 	glutKeyboardFunc( myKey );
+	glutSpecialFunc( mySpecialKey );
 	glutMouseFunc(myMouseCB);
 	glutMotionFunc(myMotionCB);
 	GDrawing::plotInstructions();

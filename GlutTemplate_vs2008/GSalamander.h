@@ -23,7 +23,7 @@ class GSalamander
 		dReal M2;						//Stores current activation value for 'muscle 2' on this joint (right muscle in body).
 		dReal amplitudeLeft;			//Amplitudes that allow turning (defined only for body segments).
 		dReal amplitudeRight;
-		char type;						//b -> body joint, l -> leg joint.
+		char type;						//b -> body joint, l to o -> leg joint.
 	};
 
 	dReal sPosition[3];					//Salamander's head position in real world coordinates.
@@ -34,7 +34,11 @@ class GSalamander
 	bool lander;						//If true, salamander will walk, otherwise it will swim.
 	dReal bodyMaxAngleDeformation;		//Global max angle deformation for body hinge joints.
 	dReal legMaxAngleDeformation;		//Global max angle deformation for legs hinges.
+<<<<<<< HEAD
 	public: dReal targetDeformationAngle;		//It is defined every time that a change of activation from 0 to >0 happens.
+=======
+	dReal kneeMaxAngleDeformation;		//Global max angle deformation for knees.
+>>>>>>> Last Salamander Working
 
 public:
 	GSalamander(void);

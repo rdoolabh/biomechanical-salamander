@@ -23,6 +23,7 @@ private:
 	vector< dJointGroupID > jointGroups;	//Group of joints for objects connected.
 	vector< dJointID > joints;				//Joints between bodies.
 	vector< GSalamander > salamanders;		//Salamanders living in ODE.
+	GOdeObject ground;						//Special object for ground.
 	
 public:
 	GOde(void);
