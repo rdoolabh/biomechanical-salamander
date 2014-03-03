@@ -88,7 +88,7 @@ Constructor.
 GOde::GOde(void)
 {
 	simulationTime = 0.0;		//Initialize simulator variables.
-	simulationStep = 0.01;
+	simulationStep = 0.05;
 }
 
 /*******************************************************************************
@@ -144,7 +144,7 @@ void GOde::initODE()
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
 	dVector3 position = { -0.345, 0.045, 0.0 };
-	GSalamander s1( position, 5.0, true );	//Position lander salamander, with frequency 1.0.
+	GSalamander s1( position, 2.5, true );	//Position lander salamander, with frequency 1.0.
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	
@@ -202,7 +202,7 @@ void GOde::simulationLoop()
 /*******************************************************************************
 Function to draw the objects inside ODE world.
 *******************************************************************************/
-void GOde::drawObjects( bool draw )
+void GOde::drawObjects( bool skel, bool draw )
 {
 	if( draw )				//Draw by default, unless user passes a false.
 	{
@@ -213,18 +213,19 @@ void GOde::drawObjects( bool draw )
 		for( unsigned I = 0; I < salamanders.size(); I++ )
 		{
 			const vector< GOdeObject>* sLinks = salamanders[I].getLinks();
-			drawGeometries( sLinks );
+			if(skel)
+				drawGeometries( sLinks );
 		}
 
 		//Draw joints that belong to the world (no to any other entity).
-		drawJoints( &joints );
+		drawJoints( &joints, skel );
 
 		//Draw joints that belong to salamanders.
 		vector< dJointID > sJoints;
 		for( unsigned I = 0; I < salamanders.size(); I++ )	//Draw joints in salamanders.
 		{
 			salamanders[I].getJoints( &sJoints );
-			drawJoints( &sJoints );
+			drawJoints( &sJoints, skel );
 		}
 	}
 }
@@ -235,14 +236,16 @@ Function to draw the geometries associated with a collection of objects.
 void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer )
 {
 	for( unsigned I = 0; I < objectsPointer->size(); I++ )
-		objectsPointer->at( I ).drawGeometries();
+		objectsPointer->at( I ).drawGeometries();				
+
 }
 
 /*******************************************************************************
 Function to draw joints given in a collection.
 *******************************************************************************/
-void GOde::drawJoints( const vector< dJointID >* jointsPointer )
+void GOde::drawJoints( const vector< dJointID >* jointsPointer, bool skel )
 {
+	GDrawing::initTexture();
 	for( unsigned I = 0; I < jointsPointer->size(); I++ )
 	{
 		dVector3 anchor;	//Position in world coordinates for the given joint.
@@ -256,7 +259,33 @@ void GOde::drawJoints( const vector< dJointID >* jointsPointer )
 		glScaled( 0.006, 0.006, 0.006 );
 		GDrawing::drawSphere();				//Draw a sphere wher the anchor is.
 		glPopMatrix();						//Restore previous pipeline state.
+		
+		glPushMatrix();						//Store current ModelView matrix.
+		GDrawing::setColor( 1.0, 1.0, 1.0 );
+		glTranslated( anchor[0], anchor[1], anchor[2] );
+
+		if(!skel)
+		{
+			if(I==0)
+			{
+				glScaled( 0.03, 0.03, 0.03 );
+				glTranslated(-0.6,0,0);
+				GDrawing::drawSphereT();
+			}
+			else if( I<10)
+			{
+				glScaled( 0.038-I*0.0015 , 0.035-I*0.0015 , 0.035-I*0.0015 );
+				GDrawing::drawSphereT();				//Draw a sphere wher the anchor is.
+			}
+			else
+			{
+				glScaled( 0.025, 0.025, 0.025 );
+				GDrawing::drawSphere();
+			}				
+		}
+		glPopMatrix();	
 	}
+	GDrawing::removeTexture();
 }
 
 /*******************************************************************************
