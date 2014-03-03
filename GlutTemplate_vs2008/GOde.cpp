@@ -144,7 +144,7 @@ void GOde::initODE()
 	//////////////////////// Initializing salamander 1 /////////////////////////
 	
 	dVector3 position = { -0.345, 0.045, 0.0 };
-	GSalamander s1( position, 2.0, true );	//Position lander salamander, with frequency 1.0.
+	GSalamander s1( position, 5.0, true );	//Position lander salamander, with frequency 1.0.
 	s1.createSalamander( World, Space, jointGroups[0] );
 	salamanders.push_back( s1 );
 	
