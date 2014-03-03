@@ -1,6 +1,13 @@
 #include "GDrawing.h"
+#include "image.h"
 
 const double GDrawing::pi = 3.14159265359;
+
+GLuint texture;
+GLuint texNames[1];
+GL_Image2D Img1("green-texture.bmp");
+
+void initTexture(void);
 
 /**************************** Constructor *****************************/
 GDrawing::GDrawing(void)
@@ -83,12 +90,45 @@ void GDrawing::drawCube()
 	glutSolidCube(1.0);
 }
 
+void GDrawing::initTexture(void) 
+{ 
+	glGenTextures(1, texNames);
+    glBindTexture(GL_TEXTURE_2D, texNames[0]); 
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Img1.m_width, Img1.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, Img1.m_data); 
+}
+
+
+void GDrawing::removeTexture(void)
+{
+	glBindTexture(GL_TEXTURE_2D, NULL); 
+	glDisable(GL_TEXTURE_2D);
+}
+
 /***********************************************************************
 Function that draws a sphere with radius 1 centered around the origin.
 ***********************************************************************/
 void GDrawing::drawSphere()
 {
 	glutSolidSphere(1.0, 50, 50);
+}
+
+
+void GDrawing::drawSphereT(void)
+{
+    glEnable(GL_TEXTURE_GEN_S); //Enable automatic generation of texture. 
+    glEnable(GL_TEXTURE_GEN_T); 
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+
+    glEnable(GL_TEXTURE_2D);    //Enable texture. 
+	glBindTexture(GL_TEXTURE_2D, texNames[0]);  //Texture of skin. 
+
+    drawSphere(); 
 }
 
 /***********************************************************************
