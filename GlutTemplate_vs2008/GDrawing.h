@@ -30,6 +30,9 @@ public:
 	static void drawCone();
 	static void drawSquareTex();
 	static void drawCube();
+	static void drawSphereT();
+	static void initTexture();
+	static void removeTexture();
 	static void drawSphere();
 	static void setColor(float r, float g, float b);
 	static void plotInstructions();
