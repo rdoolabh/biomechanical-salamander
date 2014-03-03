@@ -70,13 +70,13 @@ void GSalamander::createSalamander( dWorldID world, dSpaceID space, dJointGroupI
 	dReal length[] = { 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03 };
 	dReal width[] = { 0.03, 0.025, 0.03, 0.03, 0.03, 0.022, 0.02, 0.016, 0.01, 0.005 };	 //Encoding of biometrics.
 	dReal height[] = { 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 };
-	dReal mass[] = { 0.0177, 0.0147, 0.0177, 0.0177, 0.0177, 0.013, 0.0118, 0.0094, 0.0059, 0.0029 };
+	dReal mass[] = { 0.177, 0.147, 0.177, 0.177, 0.177, 0.13, 0.118, 0.094, 0.059, 0.029 };
 	dReal lLength[] = { 0.025, 0.025, 0.025,0.025};
 	dReal lWidth[] = {0.01, 0.01, 0.01, 0.01 };
-	dReal lMass[] = { 0.002, 0.002, 0.002, 0.002 };
+	dReal lMass[] = { 0.02, 0.02, 0.02, 0.02 };
 	dReal lLength2[] = { 0.02, 0.02, 0.02, 0.02 };		//The leg calves.
 	dReal lWidth2[] = { 0.01, 0.01, 0.01, 0.01 };
-	dReal lMass2[] = { 0.0012, 0.0012, 0.0012, 0.0012 };
+	dReal lMass2[] = { 0.012, 0.012, 0.012, 0.012 };
 
 	//Create links for head, neck, trunk, and tail; all with length 0.03.
 	//Salamander's body grows along the an axis parallel to x.
@@ -528,7 +528,7 @@ void GSalamander::turn( dReal signal )
 			}
 			
 			if( gsJoints[I].type == 'l' && gsJoints[I].type == 'o' )	//Crossed knees and shoulders?
-				gsJoints[I].amplitudeLeft = gsJoints[I].amplitudeRight = targetAmplitude;
+				gsJoints[I].amplitudeLeft = gsJoints[I].amplitudeRight = 0.0;
 		}
 	}
 	else
@@ -544,7 +544,7 @@ void GSalamander::turn( dReal signal )
 				}
 
 				if( gsJoints[I].type == 'm' && gsJoints[I].type == 'n' )	//Crossed knees and shoulders?
-					gsJoints[I].amplitudeLeft = gsJoints[I].amplitudeRight = targetAmplitude;
+					gsJoints[I].amplitudeLeft = gsJoints[I].amplitudeRight = 0.0;
 			}
 		}
 		else				//If not turning to any side, return to normal amplitudes.
