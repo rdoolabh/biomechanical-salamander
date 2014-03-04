@@ -268,8 +268,8 @@ void GOde::drawJoints( const vector< dJointID >* jointsPointer, bool skel )
 		{
 			if(I==0)
 			{
-				glScaled( 0.03, 0.03, 0.03 );
-				glTranslated(-0.6,0,0);
+				glScaled( 0.05, 0.05, 0.05 );
+				//glTranslated(-0.6,0,0);
 				GDrawing::drawSphereT();
 			}
 			else if( I<10)
