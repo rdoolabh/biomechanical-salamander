@@ -48,6 +48,8 @@ typedef char STR[STRLEN];
 #define Y 1
 #define Z 2
 
+bool skel = false;
+
 // The eye point and look-at point.
 double g_eye[3] = {0.0, 40.0, 1.0};
 double g_ref[3] = {0.0, 0.0, 0.0};
@@ -128,6 +130,9 @@ void myKey(unsigned char key, int x, int y)
 			//Make salamander 0 go straight.
 			sPtr->turn( 0.0 );
 			cout<<"Salamander 0 was indicated to go straight..."<<endl;
+			break;
+		case 'p':
+			skel= !skel;
 			break;
 		case GLUT_KEY_LEFT:
 			//Left arrow.
@@ -264,7 +269,7 @@ void display(void)
 	glScalef(g_zoom, g_zoom, g_zoom); 
 
 	////////////////////// Draw the ode objects in World ////////////////////////
-	ode.drawObjects();
+	ode.drawObjects(skel);
 
 	//////////////////////// draw chessboard ///////////////////
 
