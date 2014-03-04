@@ -276,8 +276,8 @@ void display(void)
 	//draw black
 	glPushMatrix();						
 	glTranslated( -2.0, -0.005, -5.0 );
-	GDrawing::setColor( 0.4, 0.4, 0.4 );
-	glScaled( 0.5, 0.01, 0.5 );
+	GDrawing::setColor( 0.04, 0.04, 0.04 );
+	glScaled( 0.5, 0.001, 0.5 );
 	for(int i=0; i <50; i++)
 	{
 		for(int j=0; j<50; j++)

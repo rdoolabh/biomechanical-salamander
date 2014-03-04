@@ -34,7 +34,7 @@ public:
 	void closeODE();
 	void simulationLoop();
 	void drawObjects(bool skel, bool draw = true);
-	static void drawGeometries( const vector< GOdeObject >* objectsPointer );
+	static void drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel );
 	static void drawJoints( const vector< dJointID >* jointsPointer, bool skel );
 	dJointID getJoint( int id );
 	GOdeObject* getObject( int id );

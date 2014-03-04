@@ -26,6 +26,13 @@ The bases of the cylinder are placed at Z = 0, and at Z = 1.
 ***********************************************************************/
 void GDrawing::drawCylinder()
 {
+	glEnable(GL_TEXTURE_GEN_S); //Enable automatic generation of texture. 
+    glEnable(GL_TEXTURE_GEN_T); 
+    
+
+    glEnable(GL_TEXTURE_2D);    //Enable texture. 
+	glBindTexture(GL_TEXTURE_2D, texNames[0]);  //Texture of skin. 
+
 	static GLUquadricObj *cyl = NULL ;
 	if( cyl == NULL )
 	{

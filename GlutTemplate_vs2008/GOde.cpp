@@ -207,14 +207,13 @@ void GOde::drawObjects( bool skel, bool draw )
 	if( draw )				//Draw by default, unless user passes a false.
 	{
 		//Draw geometries that belong to the world (not to any other entity).
-		drawGeometries( &objects );
+		drawGeometries( &objects, skel );
 
 		//Draw geometries that belong to the salamanders.
 		for( unsigned I = 0; I < salamanders.size(); I++ )
 		{
 			const vector< GOdeObject>* sLinks = salamanders[I].getLinks();
-			if(skel)
-				drawGeometries( sLinks );
+			drawGeometries( sLinks, skel );
 		}
 
 		//Draw joints that belong to the world (no to any other entity).
@@ -233,11 +232,91 @@ void GOde::drawObjects( bool skel, bool draw )
 /*******************************************************************************
 Function to draw the geometries associated with a collection of objects.
 *******************************************************************************/
-void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer )
+void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel )
 {
-	for( unsigned I = 0; I < objectsPointer->size(); I++ )
-		objectsPointer->at( I ).drawGeometries();				
+	GDrawing::initTexture();
+	dReal Mat[16];
+	GLfloat mat[16];
+	GDrawing::setColor( 1.0, 1.0, 1.0 );
 
+	for( unsigned I = 0; I < objectsPointer->size(); I++ )
+	{
+		if(!skel)
+			objectsPointer->at( I ).drawGeometries();	
+		else{
+			const dReal *bodypos = dBodyGetPosition (objectsPointer->at( I ).body);
+			const dReal *bodyorient = dBodyGetRotation (objectsPointer->at( I ).body);
+			GOdeObject::ODEToOpenGLMatrix(bodypos, bodyorient, Mat);
+
+			for (int i=0;i<16;i++)
+				mat[i]=Mat[i];
+			if(I<10)
+			{
+				glPushMatrix();		
+				glMultMatrixf(mat);
+				glRotatef(90,0,1,0);
+				if(I==0)
+					glScaled( 0.015, 0.015, 0.04);
+				else
+					glScaled( 0.02-I*0.001, 0.02-I*0.001, 0.04);
+				GDrawing::drawCylinder();	
+				glTranslatef(0,0,-0.1);
+				if(I<=1)
+				{
+					glScaled( 1.2-I*0.3, 1.2-I*0.3, 0.025/(0.04) );
+					GDrawing::drawSphereT();
+				}
+				else if( I!=1)
+				{
+					glScaled( 1.0, 1.0, (0.02-I*0.001)/(0.04) );
+					GDrawing::drawSphereT();
+				}
+
+				if(I>1)
+				{
+					glTranslatef(0,0,2.0+I*0.2);
+					glScaled( 0.9, 0.9, 0.9 );
+					GDrawing::drawSphereT();
+				}
+				glPopMatrix();
+			}
+			else if ( I==10 || I==12){
+				glPushMatrix();		
+				glMultMatrixf(mat);
+				glRotatef(90,0,0,1);
+				glTranslatef(0,0,-0.03);
+				glScaled( 0.01, 0.01, 0.05);
+				GDrawing::drawCylinder();	
+				glPopMatrix();
+			}
+			else if ( I==11 || I==13){
+				glPushMatrix();		
+				glMultMatrixf(mat);
+				glRotatef(90,0,0,1);
+				glTranslatef(0,0,-0.02);
+				glScaled( 0.01, 0.01, 0.06);
+				GDrawing::drawCylinder();	
+				glPopMatrix();
+			}
+			else
+			{		
+				glPushMatrix();		
+				glMultMatrixf(mat);
+				glTranslatef(0,0,-0.02);
+				glScaled( 0.01, 0.01, 0.025 );
+				GDrawing::drawCylinder();	
+				glTranslatef(0,0,-0.03);
+				glScaled( 1, 1, 0.38 );
+				GDrawing::drawSphereT();
+				glTranslatef(-1.2,0,2.5);
+				glScaled( 1, 1, 0.6 );
+				GDrawing::drawSphereT();
+				glPopMatrix();
+
+			}
+		}
+		GDrawing::removeTexture();
+	}
 }
 
 /*******************************************************************************
@@ -245,13 +324,15 @@ Function to draw joints given in a collection.
 *******************************************************************************/
 void GOde::drawJoints( const vector< dJointID >* jointsPointer, bool skel )
 {
-	GDrawing::initTexture();
 	for( unsigned I = 0; I < jointsPointer->size(); I++ )
 	{
 		dVector3 anchor;	//Position in world coordinates for the given joint.
-				
+
+
 		if( dJointGetType( jointsPointer->at( I ) ) == dJointTypeHinge )	//Is it a hinge?
+		{
 			dJointGetHingeAnchor( jointsPointer->at( I ), anchor );
+		}
 
 		glPushMatrix();						//Store current ModelView matrix.
 		GDrawing::setColor( 1.0, 1.0, 1.0 );
@@ -259,33 +340,8 @@ void GOde::drawJoints( const vector< dJointID >* jointsPointer, bool skel )
 		glScaled( 0.006, 0.006, 0.006 );
 		GDrawing::drawSphere();				//Draw a sphere wher the anchor is.
 		glPopMatrix();						//Restore previous pipeline state.
-		
-		glPushMatrix();						//Store current ModelView matrix.
-		GDrawing::setColor( 1.0, 1.0, 1.0 );
-		glTranslated( anchor[0], anchor[1], anchor[2] );
 
-		if(!skel)
-		{
-			if(I==0)
-			{
-				glScaled( 0.05, 0.05, 0.05 );
-				//glTranslated(-0.6,0,0);
-				GDrawing::drawSphereT();
-			}
-			else if( I<10)
-			{
-				glScaled( 0.038-I*0.0015 , 0.035-I*0.0015 , 0.035-I*0.0015 );
-				GDrawing::drawSphereT();				//Draw a sphere wher the anchor is.
-			}
-			else
-			{
-				glScaled( 0.025, 0.025, 0.025 );
-				GDrawing::drawSphere();
-			}				
-		}
-		glPopMatrix();	
 	}
-	GDrawing::removeTexture();
 }
 
 /*******************************************************************************
