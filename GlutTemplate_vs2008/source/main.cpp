@@ -48,7 +48,7 @@ typedef char STR[STRLEN];
 #define Y 1
 #define Z 2
 
-bool skel = false;
+int skel = 0;
 
 // The eye point and look-at point.
 double g_eye[3] = {0.0, 40.0, 1.0};
@@ -132,7 +132,13 @@ void myKey(unsigned char key, int x, int y)
 			cout<<"Salamander 0 was indicated to go straight..."<<endl;
 			break;
 		case 'p':
-			skel= !skel;
+			if(skel==1)
+				skel=2;
+			else if(skel==2)
+				skel=0;
+			else if(skel==0)
+				skel=1;
+
 			break;
 		case GLUT_KEY_LEFT:
 			//Left arrow.

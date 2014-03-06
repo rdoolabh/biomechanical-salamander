@@ -202,7 +202,7 @@ void GOde::simulationLoop()
 /*******************************************************************************
 Function to draw the objects inside ODE world.
 *******************************************************************************/
-void GOde::drawObjects( bool skel, bool draw )
+void GOde::drawObjects( int skel, bool draw )
 {
 	if( draw )				//Draw by default, unless user passes a false.
 	{
@@ -232,7 +232,7 @@ void GOde::drawObjects( bool skel, bool draw )
 /*******************************************************************************
 Function to draw the geometries associated with a collection of objects.
 *******************************************************************************/
-void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel )
+void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, int skel )
 {
 	GDrawing::initTexture();
 	dReal Mat[16];
@@ -241,9 +241,10 @@ void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel
 
 	for( unsigned I = 0; I < objectsPointer->size(); I++ )
 	{
-		if(!skel)
+		if(skel==0)
 			objectsPointer->at( I ).drawGeometries();	
-		else{
+
+		else if (skel==1){
 			const dReal *bodypos = dBodyGetPosition (objectsPointer->at( I ).body);
 			const dReal *bodyorient = dBodyGetRotation (objectsPointer->at( I ).body);
 			GOdeObject::ODEToOpenGLMatrix(bodypos, bodyorient, Mat);
@@ -315,6 +316,29 @@ void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel
 
 			}
 		}
+		else if (skel==2)
+		{
+			const dReal *bodypos = dBodyGetPosition (objectsPointer->at( I ).body);
+			const dReal *bodyorient = dBodyGetRotation (objectsPointer->at( I ).body);
+			GOdeObject::ODEToOpenGLMatrix(bodypos, bodyorient, Mat);
+
+			for (int i=0;i<16;i++)
+				mat[i]=Mat[i];
+
+			glPushMatrix();		
+			glMultMatrixf(mat);
+			if(I==0)
+				glScaled( 0.03, 0.02, 0.02);
+			else if (I==1)
+				glScaled( 0.027,0.022,0.022);
+			else if (I<10)
+				glScaled( 0.027+I*0.001,0.027-I*0.002,0.027-I*0.002);
+			else
+				glScaled( 0.018,0.018,0.018);
+
+			GDrawing::drawSphereT();	
+			glPopMatrix();
+		}
 		GDrawing::removeTexture();
 	}
 }
@@ -322,7 +346,7 @@ void GOde::drawGeometries( const vector< GOdeObject >* objectsPointer, bool skel
 /*******************************************************************************
 Function to draw joints given in a collection.
 *******************************************************************************/
-void GOde::drawJoints( const vector< dJointID >* jointsPointer, bool skel )
+void GOde::drawJoints( const vector< dJointID >* jointsPointer, int skel )
 {
 	for( unsigned I = 0; I < jointsPointer->size(); I++ )
 	{
